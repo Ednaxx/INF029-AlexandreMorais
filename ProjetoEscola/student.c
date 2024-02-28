@@ -7,28 +7,28 @@
 Person students[MAX_RECORDS];
 int studentAmount = 0;
 
+// Fix string whitespace in name
+
 void createStudent() {
-  Person newStudent;
-  Date newBirthday;
-  
   puts("Insira o nome do aluno:");
-  scanf("%s", newStudent.name);
+  scanf("%s", students[studentAmount].name);
 
   puts("Sexo masculino (0) ou feminino (1)?");
-  scanf("%d", &newStudent.gender);
+  scanf("%d", &students[studentAmount].gender);
 
   puts("Insira o CPF do aluno:");
-  scanf("%ld", &newStudent.CPF);
+  scanf("%ld", &students[studentAmount].CPF);
 
   puts("Insira o aniversário do aluno (dd/mm/yyyy):");
-  scanf("%d/%d/%d", &newBirthday.day, &newBirthday.month, &newBirthday.year);
-  newStudent.birthday = newBirthday;
+  scanf("%d/%d/%d", &students[studentAmount].birthday.day,
+    &students[studentAmount].birthday.month,
+    &students[studentAmount].birthday.year);
+  students[studentAmount].birthday = students[studentAmount].birthday;
 
-  newStudent.id = studentAmount;
+  students[studentAmount].id = studentAmount;
 
-  newStudent.active = 1;
+  students[studentAmount].active = 1;
 
-  students[studentAmount] = newStudent;
   studentAmount++;
 
   puts("\nAluno registrado com sucesso.\n");
@@ -48,16 +48,59 @@ void getStudent() {
   scanf("%ld", &id);
 
   for (int i = 0; i < studentAmount; i++) {
-    if (students[i].id != id && students[i].active == 1) break;
-
-    printf("Matrícula: %ld\n", students[i].id);
-    printf("Nome: %s\n", students[i].name);
-    printf("Sexo: %s\n", (students[i].gender == 0) ? "Masculino" : "Feminino");
-    printf("CPF: %ld\n", students[i].CPF);
-    printf("Aniversário: %d/%d/%d\n", students[i].birthday.day, students[i].birthday.month, students[i].birthday.year);
-    break;
+    if (students[i].id == id && students[i].active == 1) {
+      printf("Matrícula: %ld\n", students[i].id);
+      printf("Nome: %s\n", students[i].name);
+      printf("Sexo: %s\n", (students[i].gender == 0) ? "Masculino" : "Feminino");
+      printf("CPF: %ld\n", students[i].CPF);
+      printf("Aniversário: %d/%d/%d\n", students[i].birthday.day, students[i].birthday.month, students[i].birthday.year);
+      break;
+    }
   }
   
+}
+
+void updateStudent() {
+  long id;
+  int found = 0;
+
+  puts("\nInsira a matrícula do aluno:");
+  scanf("%ld", &id);
+
+  for (int i = 0; i < studentAmount; i++) {
+    if (students[i].id == id && students[i].active == 1) {
+      found = 1;
+
+      printf("Matrícula: %ld\n", students[i].id);
+      printf("Nome: %s\n", students[i].name);
+      printf("Sexo: %s\n", (students[i].gender == 0) ? "Masculino" : "Feminino");
+      printf("CPF: %ld\n", students[i].CPF);
+      printf("Aniversário: %d/%d/%d\n\n", students[i].birthday.day, students[i].birthday.month, students[i].birthday.year);
+      
+      puts("Insira o nome do aluno:");
+      scanf("%s", students[i].name);
+
+      puts("Sexo masculino (0) ou feminino (1)?");
+      scanf("%d", &students[i].gender);
+
+      puts("Insira o CPF do aluno:");
+      scanf("%ld", &students[i].CPF);
+
+      puts("Insira o aniversário do aluno (dd/mm/yyyy):");
+      scanf("%d/%d/%d", &students[i].birthday.day,
+        &students[i].birthday.month,
+        &students[i].birthday.year);
+      students[i].birthday = students[i].birthday;
+      
+      break;
+    };
+  }
+  
+  if (!found) printf("Usuário não encontrado.");
+}
+
+void deleteStudent() {
+  // TODO: implement this.
 }
 
 void studentMenu() {
@@ -77,10 +120,9 @@ void studentMenu() {
     if (option == 1) getAllStudents();
     else if (option == 2) getStudent();
     else if (option == 3) createStudent();
-    else if (option == 4) return;
-    else if (option == 5) return;
+    else if (option == 4) updateStudent();
+    else if (option == 5) deleteStudent();
     else if (option == 6) return;
     else puts("Opção inválida.\n\n");
   }
 }
-

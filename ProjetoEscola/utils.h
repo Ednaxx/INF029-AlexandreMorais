@@ -1,5 +1,6 @@
 #define MAX_RECORDS 10
 
+
 typedef struct date {
   int day;
   int month;
