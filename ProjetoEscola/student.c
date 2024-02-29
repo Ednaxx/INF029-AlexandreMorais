@@ -8,6 +8,21 @@ Person students[MAX_RECORDS];
 int studentAmount = 0;
 
 // Fix string whitespace in name
+// Fix search after delete
+
+int findStudentPositionById() {
+  long id;
+  int position;
+
+  puts("\nInsira a matrícula do aluno:");
+  scanf("%ld", &id);
+  
+  for (int i = 0; i < studentAmount; i++) {
+    if (students[i].id == id && students[i].active == 1) position = i;
+  }
+
+  return position;
+}
 
 void createStudent() {
   puts("Insira o nome do aluno:");
@@ -42,65 +57,66 @@ void getAllStudents() {
 }
 
 void getStudent() {
-  long id;
-  
-  puts("\nInsira a matrícula do aluno:");
-  scanf("%ld", &id);
+  int student = -1;
+  student = findStudentPositionById();
 
-  for (int i = 0; i < studentAmount; i++) {
-    if (students[i].id == id && students[i].active == 1) {
-      printf("Matrícula: %ld\n", students[i].id);
-      printf("Nome: %s\n", students[i].name);
-      printf("Sexo: %s\n", (students[i].gender == 0) ? "Masculino" : "Feminino");
-      printf("CPF: %ld\n", students[i].CPF);
-      printf("Aniversário: %d/%d/%d\n", students[i].birthday.day, students[i].birthday.month, students[i].birthday.year);
-      break;
-    }
-  }
+  if (student < 0) {
+    printf("Usuário não encontrado.");
+    return;
+  };
   
+  printf("Matrícula: %ld\n", students[student].id);
+  printf("Nome: %s\n", students[student].name);
+  printf("Sexo: %s\n", (students[student].gender == 0) ? "Masculino" : "Feminino");
+  printf("CPF: %ld\n", students[student].CPF);
+  printf("Aniversário: %d/%d/%d\n", students[student].birthday.day, students[student].birthday.month, students[student].birthday.year);
 }
 
 void updateStudent() {
-  long id;
-  int found = 0;
-
-  puts("\nInsira a matrícula do aluno:");
-  scanf("%ld", &id);
-
-  for (int i = 0; i < studentAmount; i++) {
-    if (students[i].id == id && students[i].active == 1) {
-      found = 1;
-
-      printf("Matrícula: %ld\n", students[i].id);
-      printf("Nome: %s\n", students[i].name);
-      printf("Sexo: %s\n", (students[i].gender == 0) ? "Masculino" : "Feminino");
-      printf("CPF: %ld\n", students[i].CPF);
-      printf("Aniversário: %d/%d/%d\n\n", students[i].birthday.day, students[i].birthday.month, students[i].birthday.year);
-      
-      puts("Insira o nome do aluno:");
-      scanf("%s", students[i].name);
-
-      puts("Sexo masculino (0) ou feminino (1)?");
-      scanf("%d", &students[i].gender);
-
-      puts("Insira o CPF do aluno:");
-      scanf("%ld", &students[i].CPF);
-
-      puts("Insira o aniversário do aluno (dd/mm/yyyy):");
-      scanf("%d/%d/%d", &students[i].birthday.day,
-        &students[i].birthday.month,
-        &students[i].birthday.year);
-      students[i].birthday = students[i].birthday;
-      
-      break;
-    };
-  }
+  int student = -1;
+  student = findStudentPositionById();
   
-  if (!found) printf("Usuário não encontrado.");
+  if (student < 0) {
+    printf("Usuário não encontrado.");
+    return;
+  };
+
+  printf("Matrícula: %ld\n", students[student].id);
+  printf("Nome: %s\n", students[student].name);
+  printf("Sexo: %s\n", (students[student].gender == 0) ? "Masculino" : "Feminino");
+  printf("CPF: %ld\n", students[student].CPF);
+  printf("Aniversário: %d/%d/%d\n\n", students[student].birthday.day, students[student].birthday.month, students[student].birthday.year);
+  
+  puts("Insira o nome do aluno:");
+  scanf("%s", students[student].name);
+
+  puts("Sexo masculino (0) ou feminino (1)?");
+  scanf("%d", &students[student].gender);
+
+  puts("Insira o CPF do aluno:");
+  scanf("%ld", &students[student].CPF);
+
+  puts("Insira o aniversário do aluno (dd/mm/yyyy):");
+  scanf("%d/%d/%d", &students[student].birthday.day,
+    &students[student].birthday.month,
+    &students[student].birthday.year);
+  students[student].birthday = students[student].birthday;
 }
 
 void deleteStudent() {
-  // TODO: implement this.
+  int student = -1;
+  student = findStudentPositionById();
+
+  if (student < 0) {
+    printf("Usuário não encontrado.");
+    return;
+  };
+
+  for (int i = student; i < studentAmount; i++) {
+    students[i] = students[i + 1];
+  }
+  
+  students[studentAmount - 1].active = 0;
 }
 
 void studentMenu() {
