@@ -1,5 +1,5 @@
 #define MAX_RECORDS 10
-
+#define MAX_NAME_SIZE 256
 
 typedef struct date {
   int day;
@@ -9,7 +9,7 @@ typedef struct date {
 
 typedef struct person {
   long id;
-  char name[50];
+  char name[MAX_NAME_SIZE];
   int gender;
   long CPF;
   Date birthday;

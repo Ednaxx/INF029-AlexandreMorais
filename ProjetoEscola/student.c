@@ -8,25 +8,29 @@ Person students[MAX_RECORDS];
 int studentAmount = 0;
 
 // Fix string whitespace in name
-// Fix search after delete
 
 int findStudentPositionById() {
   long id;
-  int position;
+  int position = -1;
 
   puts("\nInsira a matrícula do aluno:");
   scanf("%ld", &id);
   
   for (int i = 0; i < studentAmount; i++) {
-    if (students[i].id == id && students[i].active == 1) position = i;
+    if (students[i].id == id && students[i].active) position = i;
   }
 
   return position;
 }
 
 void createStudent() {
+  char bufferNewLine;
+  
+  scanf("%c", &bufferNewLine);
   puts("Insira o nome do aluno:");
-  scanf("%s", students[studentAmount].name);
+  fgets(students[studentAmount].name, MAX_NAME_SIZE, stdin);
+  if ((strlen(students[studentAmount].name) > 0) && (students[studentAmount].name[strlen (students[studentAmount].name) - 1] == '\n'))
+    students[studentAmount].name[strlen (students[studentAmount].name) - 1] = '\0';
 
   puts("Sexo masculino (0) ou feminino (1)?");
   scanf("%d", &students[studentAmount].gender);
@@ -57,8 +61,7 @@ void getAllStudents() {
 }
 
 void getStudent() {
-  int student = -1;
-  student = findStudentPositionById();
+  int student = findStudentPositionById();
 
   if (student < 0) {
     printf("Usuário não encontrado.");
@@ -73,8 +76,7 @@ void getStudent() {
 }
 
 void updateStudent() {
-  int student = -1;
-  student = findStudentPositionById();
+  int student = findStudentPositionById();
   
   if (student < 0) {
     printf("Usuário não encontrado.");
@@ -87,8 +89,15 @@ void updateStudent() {
   printf("CPF: %ld\n", students[student].CPF);
   printf("Aniversário: %d/%d/%d\n\n", students[student].birthday.day, students[student].birthday.month, students[student].birthday.year);
   
+  char bufferNewLine;
+  scanf("%c", &bufferNewLine);
   puts("Insira o nome do aluno:");
-  scanf("%s", students[student].name);
+  fgets(students[studentAmount].name, MAX_NAME_SIZE, stdin);
+  if ((strlen(students[studentAmount].name) > 0) && (students[studentAmount].name[strlen (students[studentAmount].name) - 1] == '\n'))
+    students[studentAmount].name[strlen (students[studentAmount].name) - 1] = '\0';
+
+  puts("Sexo masculino (0) ou feminino (1)?");
+  scanf("%d", &students[studentAmount].gender);
 
   puts("Sexo masculino (0) ou feminino (1)?");
   scanf("%d", &students[student].gender);
@@ -104,19 +113,18 @@ void updateStudent() {
 }
 
 void deleteStudent() {
-  int student = -1;
-  student = findStudentPositionById();
+  int student = findStudentPositionById();
 
   if (student < 0) {
     printf("Usuário não encontrado.");
     return;
   };
 
+  studentAmount--;
   for (int i = student; i < studentAmount; i++) {
     students[i] = students[i + 1];
   }
-  
-  students[studentAmount - 1].active = 0;
+  students[studentAmount].active = 0;
 }
 
 void studentMenu() {
