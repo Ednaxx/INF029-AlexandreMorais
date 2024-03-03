@@ -1,3 +1,3 @@
-init: school.c student.c
-	gcc -o school school.c student.c
+init: main.c student.c person.c
+	gcc -o school main.c student.c person.c
 	./school
