@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "utils.h"
-#include "person.h"
+#include "../util/utils.h"
+#include "../person/person.h"
 
 
 Person students[MAX_RECORDS];
