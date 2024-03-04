@@ -10,18 +10,12 @@ int comparePersonsByBirthday(const void *a, const void *b) {
     Person **personA = (Person **)a;
     Person **personB = (Person **)b;
 
-    if ((*personA)->birthday.tm_year < (*personB)->birthday.tm_year) {
-        return -1;
-    } else if ((*personA)->birthday.tm_year > (*personB)->birthday.tm_year) {
-        return 1;
-    } else {
-        if ((*personA)->birthday.tm_mon < (*personB)->birthday.tm_mon) {
-            return -1;
-        } else if ((*personA)->birthday.tm_mon > (*personB)->birthday.tm_mon) {
-            return 1;
-        } else {
-            return (*personA)->birthday.tm_mday - (*personB)->birthday.tm_mday;
-        }
+    if ((*personA)->birthday.tm_year < (*personB)->birthday.tm_year) return -1;
+    else if ((*personA)->birthday.tm_year > (*personB)->birthday.tm_year) return 1;
+    else {
+        if ((*personA)->birthday.tm_mon < (*personB)->birthday.tm_mon) return -1;
+        else if ((*personA)->birthday.tm_mon > (*personB)->birthday.tm_mon) return 1;
+        else return (*personA)->birthday.tm_mday - (*personB)->birthday.tm_mday;
     }
 }
 
@@ -32,22 +26,11 @@ int comparePersonsByName(const void *a, const void *b) {
     return strcmp((*personA)->name, (*personB)->name);
 }
 
-void getPersonsOrderedByBirthday(Person persons[], int numPersons) {
+void getOrderedPersons(Person persons[], int numPersons, int (*func)(const void *a, const void *b)) {
   Person *personPointers[numPersons];
   for (int i = 0; i < numPersons; i++) personPointers[i] = &persons[i];
 
-  qsort(personPointers, numPersons, sizeof(Person *), comparePersonsByBirthday);
-
-  for (int i = 0; i < numPersons; i++) {
-    if (personPointers[i]->active == 1) printf("%ld - %s\n", personPointers[i]->id, personPointers[i]->name);
-  }
-}
-
-void getPersonsOrderedByName(Person persons[], int numPersons) {
-  Person *personPointers[numPersons];
-  for (int i = 0; i < numPersons; i++) personPointers[i] = &persons[i];
-
-  qsort(personPointers, numPersons, sizeof(Person *), comparePersonsByName);
+  qsort(personPointers, numPersons, sizeof(Person *), func);
 
   for (int i = 0; i < numPersons; i++) {
     if (personPointers[i]->active == 1) printf("%ld - %s\n", personPointers[i]->id, personPointers[i]->name);

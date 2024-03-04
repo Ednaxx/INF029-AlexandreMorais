@@ -12,6 +12,8 @@ typedef struct person {
 
 void getPerson(Person person);
 
-void getPersonsOrderedByBirthday(Person persons[], int numPersons);
+int comparePersonsByBirthday(const void *a, const void *b);
 
-void getPersonsOrderedByName(Person persons[], int numPersons);
+int comparePersonsByName(const void *a, const void *b);
+
+void getOrderedPersons(Person persons[], int numPersons, int (*func)(const void *a, const void *b));

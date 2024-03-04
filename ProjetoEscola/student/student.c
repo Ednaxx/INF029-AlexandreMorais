@@ -59,12 +59,12 @@ void getAllStudents() {
 
 void getAllStudentsOrderedByBirthday() {
   puts("\nMatrícula - Nome do aluno");
-  getPersonsOrderedByBirthday(students, studentAmount);
+  getOrderedPersons(students, studentAmount, comparePersonsByBirthday);
 };
 
 void getAllStudentsOrderedByName() {
   puts("\nMatrícula - Nome do aluno");
-  getPersonsOrderedByName(students, studentAmount);
+  getOrderedPersons(students, studentAmount, comparePersonsByName);
 };
 
 void getAllStudentsBySex() {
