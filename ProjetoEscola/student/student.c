@@ -9,40 +9,10 @@
 Person students[MAX_RECORDS];
 int studentAmount = 0;
 
-int findStudentPositionById() {
-  long id;
-  int position = -1;
-
-  puts("\nInsira a matrícula do aluno:");
-  scanf("%ld", &id);
-  
-  for (int i = 0; i < studentAmount; i++) {
-    if (students[i].id == id && students[i].active) position = i;
-  }
-
-  return position;
-}
 
 void createStudent() {
-  char bufferNewLine;
-  
-  scanf("%c", &bufferNewLine);
-  puts("Insira o nome do aluno:");
-  fgets(students[studentAmount].name, MAX_NAME_SIZE, stdin);
-  if ((strlen(students[studentAmount].name) > 0) && (students[studentAmount].name[strlen (students[studentAmount].name) - 1] == '\n'))
-    students[studentAmount].name[strlen (students[studentAmount].name) - 1] = '\0';
-
-  puts("Sexo masculino (0) ou feminino (1)?");
-  scanf("%d", &students[studentAmount].gender);
-
-  puts("Insira o CPF do aluno:");
-  scanf("%ld", &students[studentAmount].CPF);
-
-  puts("Insira o aniversário do aluno (dd/mm/yyyy):");
-  scanf("%d/%d/%d", &students[studentAmount].birthday.tm_mday, &students[studentAmount].birthday.tm_mon, &students[studentAmount].birthday.tm_year);
-
+  setPerson(&students[studentAmount]);
   students[studentAmount].id = studentAmount;
-
   students[studentAmount].active = 1;
 
   studentAmount++;
@@ -68,18 +38,18 @@ void getAllStudentsOrderedByName() {
 };
 
 void getAllStudentsBySex() {
-  int option = -1;
+  int option;
 
   puts("Selecione o sexo do aluno: (0 - Masculino | 1 - Feminino).");
   scanf("%d", &option);
   
-  if (option) {
+  if (option == 1) {
     puts("\nMatrícula - Nome do aluno");
     for (int i = 0; i < studentAmount; i++) {
       if (students[i].active == 1 && students[i].gender) printf("%ld - %s\n", students[i].id, students[i].name);
     }
   }
-  else if (!option) {
+  else if (option == 0) {
     puts("\nMatrícula - Nome do aluno");
     for (int i = 0; i < studentAmount; i++) {
       if (students[i].active == 1 && !students[i].gender) printf("%ld - %s\n", students[i].id, students[i].name);
@@ -88,55 +58,43 @@ void getAllStudentsBySex() {
   else puts("Opção inválida.\n\n");
 };
 
-void getStudent() {
-  int student = findStudentPositionById();
+int getStudent() {
+  int student = -1;
+  long id;
 
+  puts("\nInsira a matrícula:");
+  scanf("%ld", &id);
+
+  for (int i = 0; i < studentAmount; i++) {
+    if (students[i].id == id && students[i].active) student = i;
+  }
   if (student < 0) {
-    printf("Usuário não encontrado.");
-    return;
+    puts("Aluno não encontrado.");
+    return -1;
   };
   
-  getPerson(students[student]);
+  getPerson(&students[student]);
+  return student;
 }
 
 void updateStudent() {
-  int student = findStudentPositionById();
+  int student = getStudent();
   
-  if (student < 0) {
-    printf("Usuário não encontrado.");
-    return;
-  };
-
-  printf("Matrícula: %ld\n", students[student].id);
-  printf("Nome: %s\n", students[student].name);
-  printf("Sexo: %s\n", (students[student].gender == 0) ? "Masculino" : "Feminino");
-  printf("CPF: %ld\n", students[student].CPF);
-  printf("Aniversário: %d/%d/%d\n\n", students[student].birthday.tm_mday, students[student].birthday.tm_mon, students[student].birthday.tm_year);
+  if (student < 0) return;
   
   char bufferNewLine;
   scanf("%c", &bufferNewLine);
   puts("Insira o nome do aluno:");
-  fgets(students[student].name, MAX_NAME_SIZE, stdin);
-  if ((strlen(students[student].name) > 0) && (students[student].name[strlen (students[student].name) - 1] == '\n'))
-    students[student].name[strlen (students[student].name) - 1] = '\0';
+  
+  setPerson(&students[student]);
 
-  puts("Sexo masculino (0) ou feminino (1)?");
-  scanf("%d", &students[student].gender);
-
-  puts("Insira o CPF do aluno:");
-  scanf("%ld", &students[student].CPF);
-
-  puts("Insira o aniversário do aluno (dd/mm/yyyy):");
-  scanf("%d/%d/%d", &students[student].birthday.tm_mday, &students[student].birthday.tm_mon, &students[student].birthday.tm_year);
+  puts("\nAluno atualizado com sucesso.\n");
 }
 
 void deleteStudent() {
-  int student = findStudentPositionById();
+  int student = getStudent();
 
-  if (student < 0) {
-    printf("Usuário não encontrado.");
-    return;
-  };
+  if (student < 0) return;
 
   studentAmount--;
   for (int i = student; i < studentAmount; i++) {

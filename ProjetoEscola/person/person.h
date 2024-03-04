@@ -10,10 +10,12 @@ typedef struct person {
   int active;
 } Person;
 
-void getPerson(Person person);
+void getPerson(Person *person);
 
 int comparePersonsByBirthday(const void *a, const void *b);
 
 int comparePersonsByName(const void *a, const void *b);
 
 void getOrderedPersons(Person persons[], int numPersons, int (*func)(const void *a, const void *b));
+
+void setPerson(Person *person);
