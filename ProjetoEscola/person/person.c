@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 
+#include "../util/utils.h"
 #include "person.h"
 
 
@@ -109,7 +110,7 @@ int validateCPF(char *CPF) {
 
 int validateBirthday(char *birthdayInput) {
   Date tm_date;
-  memset(&tm_date, 0, sizeof(struct tm));
+  memset(&tm_date, 0, sizeof(Date));
 
   if (sscanf(birthdayInput, "%d/%d/%d", &tm_date.tm_mday, &tm_date.tm_mon, &tm_date.tm_year) != 3) {
       return 0;

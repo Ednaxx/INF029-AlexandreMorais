@@ -4,7 +4,10 @@
 #include "./student/student.h"
 
 int main(void) {
-  int option = 0;
+  Person students[MAX_RECORDS];
+  int studentAmount = 0;
+
+  int option;
 
   while (1) {
     puts("Bem vindo ao Projeto Escola - Escolha a opção desejada:");
@@ -15,7 +18,7 @@ int main(void) {
 
     scanf("%d", &option);
 
-    if (option == 1) studentMenu();
+    if (option == 1) studentMenu(students, &studentAmount);
     if (option == 2) break;
     if (option == 3) break;
     if (option == 4) break;

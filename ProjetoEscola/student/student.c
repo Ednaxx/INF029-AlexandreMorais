@@ -6,38 +6,34 @@
 #include "../person/person.h"
 
 
-Person students[MAX_RECORDS];
-int studentAmount = 0;
+void createStudent(Person *students, int *studentAmount) {
+  setPerson(&students[*studentAmount]);
+  students[*studentAmount].id = *studentAmount;
+  students[*studentAmount].active = 1;
 
-
-void createStudent() {
-  setPerson(&students[studentAmount]);
-  students[studentAmount].id = studentAmount;
-  students[studentAmount].active = 1;
-
-  studentAmount++;
+  (*studentAmount)++;
 
   puts("\nAluno registrado com sucesso.\n");
 }
 
-void getAllStudents() {
+void getAllStudents(Person *students, int *studentAmount) {
   puts("\nMatrícula - Nome do aluno");
-  for (int i = 0; i < studentAmount; i++) {
+  for (int i = 0; i < *studentAmount; i++) {
     if (students[i].active == 1) printf("%ld - %s\n", students[i].id, students[i].name);
   }
 }
 
-void getAllStudentsOrderedByBirthday() {
+void getAllStudentsOrderedByBirthday(Person *students, int *studentAmount) {
   puts("\nMatrícula - Nome do aluno");
-  getOrderedPersons(students, studentAmount, comparePersonsByBirthday);
-};
+  getOrderedPersons(students, *studentAmount, comparePersonsByBirthday);
+}
 
-void getAllStudentsOrderedByName() {
+void getAllStudentsOrderedByName(Person *students, int *studentAmount) {
   puts("\nMatrícula - Nome do aluno");
-  getOrderedPersons(students, studentAmount, comparePersonsByName);
-};
+  getOrderedPersons(students, *studentAmount, comparePersonsByName);
+}
 
-void getAllStudentsBySex() {
+void getAllStudentsBySex(Person *students, int *studentAmount) {
   int option;
 
   puts("Selecione o sexo do aluno: (0 - Masculino | 1 - Feminino).");
@@ -45,27 +41,27 @@ void getAllStudentsBySex() {
   
   if (option == 1) {
     puts("\nMatrícula - Nome do aluno");
-    for (int i = 0; i < studentAmount; i++) {
+    for (int i = 0; i < *studentAmount; i++) {
       if (students[i].active == 1 && students[i].gender) printf("%ld - %s\n", students[i].id, students[i].name);
     }
   }
   else if (option == 0) {
     puts("\nMatrícula - Nome do aluno");
-    for (int i = 0; i < studentAmount; i++) {
+    for (int i = 0; i < *studentAmount; i++) {
       if (students[i].active == 1 && !students[i].gender) printf("%ld - %s\n", students[i].id, students[i].name);
     }
   }
   else puts("Opção inválida.\n\n");
 };
 
-int getStudent() {
+int getStudent(Person *students, int *studentAmount) {
   int student = -1;
   long id;
 
   puts("\nInsira a matrícula:");
   scanf("%ld", &id);
 
-  for (int i = 0; i < studentAmount; i++) {
+  for (int i = 0; i < *studentAmount; i++) {
     if (students[i].id == id && students[i].active) student = i;
   }
   if (student < 0) {
@@ -77,8 +73,8 @@ int getStudent() {
   return student;
 }
 
-void updateStudent() {
-  int student = getStudent();
+void updateStudent(Person *students, int *studentAmount) {
+  int student = getStudent(students, studentAmount);
   
   if (student < 0) return;
   
@@ -87,21 +83,21 @@ void updateStudent() {
   puts("\nAluno atualizado com sucesso.\n");
 }
 
-void deleteStudent() {
-  int student = getStudent();
+void deleteStudent(Person *students, int *studentAmount) {
+  int student = getStudent(students, studentAmount);
 
   if (student < 0) return;
 
   studentAmount--;
-  for (int i = student; i < studentAmount; i++) {
+  for (int i = student; i < *studentAmount; i++) {
     students[i] = students[i + 1];
   }
-  students[studentAmount].active = 0;
+  students[*studentAmount].active = 0;
 
   puts("Aluno removido com sucesso.");
 }
 
-void getAllStudentsMenu() {
+void getAllStudentsMenu(Person *students, int *studentAmount) {
   int option = 0;
   
   puts("\nListar alunos.");
@@ -113,15 +109,15 @@ void getAllStudentsMenu() {
 
   scanf("%d", &option);
 
-  if (option == 1) getAllStudents();
-  else if (option == 2) getAllStudentsOrderedByName();
-  else if (option == 3) getAllStudentsOrderedByBirthday();
-  else if (option == 4) getAllStudentsBySex();
+  if (option == 1) getAllStudents(students, studentAmount);
+  else if (option == 2) getAllStudentsOrderedByName(students, studentAmount);
+  else if (option == 3) getAllStudentsOrderedByBirthday(students, studentAmount);
+  else if (option == 4) getAllStudentsBySex(students, studentAmount);
   else if (option == 5) return;
   else puts("Opção inválida.\n\n");
 };
 
-void studentMenu() {
+void studentMenu(Person *students, int *studentAmount) {
   int option = 0;
   
   while (1) {
@@ -135,11 +131,11 @@ void studentMenu() {
 
     scanf("%d", &option);
     
-    if (option == 1) getAllStudentsMenu();
-    else if (option == 2) getStudent();
-    else if (option == 3) createStudent();
-    else if (option == 4) updateStudent();
-    else if (option == 5) deleteStudent();
+    if (option == 1) getAllStudentsMenu(students, studentAmount);
+    else if (option == 2) getStudent(students, studentAmount);
+    else if (option == 3) createStudent(students, studentAmount);
+    else if (option == 4) updateStudent(students, studentAmount);
+    else if (option == 5) deleteStudent(students, studentAmount);
     else if (option == 6) return;
     else puts("Opção inválida.\n\n");
   }
