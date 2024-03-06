@@ -5,7 +5,7 @@ typedef struct person {
   long id;
   char name[MAX_NAME_SIZE];
   int gender;
-  long CPF;
+  char CPF[12];
   Date birthday;
   int active;
 } Person;

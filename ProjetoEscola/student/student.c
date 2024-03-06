@@ -82,10 +82,6 @@ void updateStudent() {
   
   if (student < 0) return;
   
-  char bufferNewLine;
-  scanf("%c", &bufferNewLine);
-  puts("Insira o nome do aluno:");
-  
   setPerson(&students[student]);
 
   puts("\nAluno atualizado com sucesso.\n");
@@ -101,6 +97,8 @@ void deleteStudent() {
     students[i] = students[i + 1];
   }
   students[studentAmount].active = 0;
+
+  puts("Aluno removido com sucesso.");
 }
 
 void getAllStudentsMenu() {
