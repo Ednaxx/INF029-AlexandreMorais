@@ -2,10 +2,14 @@
 #include <stdlib.h>
 
 #include "./student/student.h"
+#include "./teacher/teacher.h"
 
 int main(void) {
   Person students[MAX_RECORDS];
   int studentAmount = 0;
+
+  Person teachers[MAX_RECORDS];
+  int teacherAmount = 0;
 
   int option;
 
@@ -19,7 +23,7 @@ int main(void) {
     scanf("%d", &option);
 
     if (option == 1) studentMenu(students, &studentAmount);
-    if (option == 2) break;
+    if (option == 2) teacherMenu(teachers, &teacherAmount);
     if (option == 3) break;
     if (option == 4) break;
     else puts("Opção inválida.\n");

@@ -1,3 +1,6 @@
+#ifndef PERSON_H
+#define PERSON_H
+
 #include "../util/utils.h"
 #include "time.h"
 
@@ -19,3 +22,5 @@ int comparePersonsByName(const void *a, const void *b);
 void getOrderedPersons(Person persons[], int numPersons, int (*func)(const void *a, const void *b));
 
 void setPerson(Person *person);
+
+#endif

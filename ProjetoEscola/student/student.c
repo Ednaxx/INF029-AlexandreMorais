@@ -94,7 +94,7 @@ void deleteStudent(Person *students, int *studentAmount) {
   }
   students[*studentAmount].active = 0;
 
-  puts("Aluno removido com sucesso.");
+  puts("\nAluno removido com sucesso.\n");
 }
 
 void getAllStudentsMenu(Person *students, int *studentAmount) {
