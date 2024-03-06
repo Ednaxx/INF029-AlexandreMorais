@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <time.h>
 
 #include "person.h"
 
@@ -44,11 +43,11 @@ void getPerson(Person *person) {
   printf("Matrícula: %ld\n", person->id);
   printf("Nome: %s\n", person->name);
   printf("Sexo: %s\n", (person->gender == 0) ? "Masculino" : "Feminino");
-  printf("CPF: %ld\n", person->CPF);
+  printf("CPF: %s\n", person->CPF);
 
   printf("Aniversário: ");
-  printf(( (person->birthday.tm_mday >= 10) ? "%d/" : "%0d/" ), person->birthday.tm_mday);
-  printf(( (person->birthday.tm_mon >= 10) ? "%d/" : "%0d/" ), person->birthday.tm_mon);
+  printf(( (person->birthday.tm_mday >= 10) ? "%d/" : "0%d/" ), person->birthday.tm_mday);
+  printf(( (person->birthday.tm_mon >= 10) ? "%d/" : "0%d/" ), person->birthday.tm_mon);
   printf("%d\n", person->birthday.tm_year);
 }
 
@@ -68,17 +67,51 @@ int validateGender(int gender) {
   return 1;
 }
 
-// TODO: implement this
+int validateCPF(char *CPF) {
+  if (strlen(CPF) != 11) return 0;
 
-int validateCPF(long CPF) {
-  return 1;
+  for (int i = 0; i < 11; i++) {
+      if (!isdigit(CPF[i])) return 0;
+  }
+
+  // Check CPF format
+  long invalidFormats[10] = {00000000000, 11111111111, 22222222222, 33333333333, 44444444444, 55555555555, 66666666666, 77777777777, 88888888888, 99999999999};
+  long cpfValue = atol(CPF);
+
+  for (int i = 0; i < 10; i++) {
+    if (cpfValue == invalidFormats[i]) {
+      return 0;
+    }
+  }
+
+  // Validate check digits
+  int sum = 0;
+  int tempCPF[11];
+
+  for (int i = 0; i < 11; i++) {
+    tempCPF[i] = CPF[i] - '0';
+    if (i < 9) sum += tempCPF[i] * (10 - i);
+  }
+
+  int firstCheckDigit = (sum % 11 < 2) ? 0 : (11 - (sum % 11));
+
+  if (tempCPF[9] != firstCheckDigit) return 0;
+
+  sum = 0;
+  for (int i = 0; i < 10; i++) {
+    sum += tempCPF[i] * (11 - i);
+  }
+
+  int secondCheckDigit = (sum % 11 < 2) ? 0 : (11 - (sum % 11));
+
+  return (tempCPF[10] == secondCheckDigit);
 }
 
 int validateBirthday(char *birthdayInput) {
-  struct tm tm_date;
+  Date tm_date;
   memset(&tm_date, 0, sizeof(struct tm));
 
-  if (sscanf(date, "%d/%d/%d", &tm_date.tm_mday, &tm_date.tm_mon, &tm_date.tm_year) != 3) {
+  if (sscanf(birthdayInput, "%d/%d/%d", &tm_date.tm_mday, &tm_date.tm_mon, &tm_date.tm_year) != 3) {
       return 0;
   }
 
@@ -86,21 +119,31 @@ int validateBirthday(char *birthdayInput) {
       return 0;
   }
 
-  return 1
+  return 1;
+}
+
+
+void clearBuffer(char *string) {
+  if ((strlen(string) > 0) && (string[strlen(string) - 1] == '\n')) {
+      string[strlen(string) - 1] = '\0';
+  }
+  else {
+      int c;
+      while ((c = getchar()) != '\n' && c != EOF);
+  }
 }
 
 
 
-void setPersonName(Person *person) {
+void setPersonName(Person *person) {  
   char name[MAX_NAME_SIZE];
   
   puts("Insira o nome (max: 50 caracteres):");
   fgets(name, MAX_NAME_SIZE, stdin);
-  if ((strlen(name) > 0) && (name[strlen (name) - 1] == '\n'))
-    name[strlen (name) - 1] = '\0';
+  clearBuffer(name);
 
   if (validateName(name)) {
-    person->name = name;
+    strcpy(person->name, name);
     return;
   }
 
@@ -108,11 +151,13 @@ void setPersonName(Person *person) {
   setPersonName(person);
 }
 
-setPersonGender(Person *person) {
+void setPersonGender(Person *person) {
   int gender;
   puts("Sexo masculino (0) ou feminino (1)?");
   scanf("%d", &gender);
 
+  while(getchar() != '\n');
+  
   if (validateGender(gender)) {
     person->gender = gender;
     return;
@@ -122,14 +167,16 @@ setPersonGender(Person *person) {
   setPersonGender(person);
 }
 
-setPersonCPF(Person *person) {
+void setPersonCPF(Person *person) {
   char CPF[12];
   
   puts("Insira o CPF:");
-  gets(CPF);
+  fgets(CPF, 12, stdin);
+
+  clearBuffer(CPF);
 
   if (validateCPF(CPF)) {
-    person->CPF = CPF;
+    strcpy(person->CPF, CPF);
     return;
   }
 
@@ -137,14 +184,16 @@ setPersonCPF(Person *person) {
   setPersonCPF(person);
 }
 
-setPersonBirthday(Person *person) {
+void setPersonBirthday(Person *person) {
   char birthdayInput[12];
   
   puts("Insira o aniversário (dd/mm/yyyy):");
-  gets(birthdayInput);
+  fgets(birthdayInput, 12, stdin);
+
+  clearBuffer(birthdayInput);
 
   if (validateBirthday(birthdayInput)) {
-    sscanf(date, "%d/%d/%d", &person->birthday.tm_mday, &person->birthday.tm_mon, &person->birthday.tm_year);
+    sscanf(birthdayInput, "%d/%d/%d", &person->birthday.tm_mday, &person->birthday.tm_mon, &person->birthday.tm_year);
     return;
   }
 
@@ -153,8 +202,7 @@ setPersonBirthday(Person *person) {
 }
 
 void setPerson(Person *person) {
-  char bufferNewLine;
-  scanf("%c", &bufferNewLine);
+  while(getchar() != '\n');
   
   setPersonName(person);
   setPersonGender(person);
