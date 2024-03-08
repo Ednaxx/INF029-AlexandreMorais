@@ -63,6 +63,7 @@ int getStudent(Person *students, int *studentAmount) {
 
   for (int i = 0; i < *studentAmount; i++) {
     if (students[i].id == id && students[i].active) student = i;
+    break;
   }
   if (student < 0) {
     puts("Aluno não encontrado.");

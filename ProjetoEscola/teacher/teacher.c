@@ -58,19 +58,40 @@ int getTeacher(Person *teachers, int *teacherAmount) {
   int teacher = -1;
   long id;
 
-  puts("\nInsira a matrícula:");
+  puts("\nInsira a matrícula do professor:");
   scanf("%ld", &id);
 
   for (int i = 0; i < *teacherAmount; i++) {
     if (teachers[i].id == id && teachers[i].active) teacher = i;
+    break;
   }
   if (teacher < 0) {
     puts("Professor não encontrado.");
     return -1;
   };
 
-  getPerson(&teachers[teacher]);
   return teacher;
+}
+
+// FIX THIS LATER
+
+Person * getTeacherPointer(Person *teachers, int *teacherAmount) {
+  int teacher = -1;
+  long id;
+
+  puts("\nInsira a matrícula do professor:");
+  scanf("%ld", &id);
+
+  for (int i = 0; i < *teacherAmount; i++) {
+    if (teachers[i].id == id && teachers[i].active) teacher = i;
+    break;
+  }
+  if (teacher < 0) {
+    puts("Professor não encontrado.");
+    return NULL;
+  };
+
+  return &teachers[teacher];
 }
 
 void updateTeacher(Person *teachers, int *teacherAmount) {
@@ -121,7 +142,7 @@ void teacherMenu(Person *teachers, int *teacherAmount) {
   int option = 0;
 
   while (1) {
-    puts("\nAlunos - Escolha a opção desejada:");
+    puts("\nProfessores - Escolha a opção desejada:");
     puts("1 - Listar professores.");
     puts("2 - Buscar professor por matrícula.");
     puts("3 - Matricular professor.");
@@ -132,7 +153,12 @@ void teacherMenu(Person *teachers, int *teacherAmount) {
     scanf("%d", &option);
 
     if (option == 1) getAllTeachersMenu(teachers, teacherAmount);
-    else if (option == 2) getTeacher(teachers, teacherAmount);
+      
+    else if (option == 2) {
+      int teacher = getTeacher(teachers, teacherAmount);
+      getPerson(&teachers[teacher]);
+    }
+      
     else if (option == 3) createTeacher(teachers, teacherAmount);
     else if (option == 4) updateTeacher(teachers, teacherAmount);
     else if (option == 5) deleteTeacher(teachers, teacherAmount);

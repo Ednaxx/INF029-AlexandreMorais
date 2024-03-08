@@ -6,4 +6,6 @@
 
 typedef struct tm Date;
 
+void clearBuffer(char *string);
+
 #endif

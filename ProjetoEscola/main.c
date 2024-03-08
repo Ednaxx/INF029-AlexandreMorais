@@ -3,6 +3,7 @@
 
 #include "./student/student.h"
 #include "./teacher/teacher.h"
+#include "./subject/subject.h"
 
 int main(void) {
   Person students[MAX_RECORDS];
@@ -10,6 +11,9 @@ int main(void) {
 
   Person teachers[MAX_RECORDS];
   int teacherAmount = 0;
+
+  Subject subjects[MAX_RECORDS];
+  int subjectAmount = 0;
 
   int option;
 
@@ -24,7 +28,7 @@ int main(void) {
 
     if (option == 1) studentMenu(students, &studentAmount);
     if (option == 2) teacherMenu(teachers, &teacherAmount);
-    if (option == 3) break;
+    if (option == 3) subjectMenu(subjects, &subjectAmount, students, &studentAmount, teachers, &teacherAmount);
     if (option == 4) break;
     else puts("Opção inválida.\n");
   };

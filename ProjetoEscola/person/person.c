@@ -53,13 +53,15 @@ void getPerson(Person *person) {
 }
 
 
-
 int validateName(char *name) {
   if (strlen(name) > 50) return 0;
 
-  for (int i = 0; name[i] != '\0'; i++) {
-    if (!isalpha(name[i]) && !isspace(name[i])) return 0;
+  for (size_t i = 0; i < strlen(name); i++) {
+      if (!isalpha(name[i]) && !isspace(name[i])) {
+          return 0;
+      }
   }
+  
   return 1;
 }
 
@@ -76,7 +78,12 @@ int validateCPF(char *CPF) {
   }
 
   // Check CPF format
-  long invalidFormats[10] = {00000000000, 11111111111, 22222222222, 33333333333, 44444444444, 55555555555, 66666666666, 77777777777, 88888888888, 99999999999};
+  long invalidFormats[10] = {
+    00000000000, 11111111111, 22222222222, 
+    33333333333, 44444444444, 55555555555, 
+    66666666666, 77777777777, 88888888888, 
+    99999999999};
+  
   long cpfValue = atol(CPF);
 
   for (int i = 0; i < 10; i++) {
@@ -122,18 +129,6 @@ int validateBirthday(char *birthdayInput) {
 
   return 1;
 }
-
-
-void clearBuffer(char *string) {
-  if ((strlen(string) > 0) && (string[strlen(string) - 1] == '\n')) {
-      string[strlen(string) - 1] = '\0';
-  }
-  else {
-      int c;
-      while ((c = getchar()) != '\n' && c != EOF);
-  }
-}
-
 
 
 void setPersonName(Person *person) {  
