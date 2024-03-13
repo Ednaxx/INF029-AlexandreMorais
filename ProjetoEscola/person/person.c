@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
 
 #include "../util/utils.h"
 #include "person.h"
@@ -204,4 +205,67 @@ void setPerson(Person *person) {
   setPersonGender(person);
   setPersonCPF(person);
   setPersonBirthday(person);
+}
+
+void getCurrentMonthsBirthday(Person *teachers, int *teacherAmount, Person *students, int *studentAmount) {
+  time_t currentTime;
+  Date *localTime;
+
+  time(&currentTime);
+  localTime = localtime(&currentTime);
+
+  puts("Aniversariantes do mês:");
+
+  puts("\nProfessores:");
+  
+  for (int i = 0; i < *teacherAmount; i++) {
+    if (teachers[i].birthday.tm_mon == (localTime->tm_mon + 1) && teachers[i].active) {
+      printf("%s - ", teachers[i].name);
+      printf(( (teachers[i].birthday.tm_mday >= 10) ? "%d/" : "0%d/" ), teachers[i].birthday.tm_mday);
+      printf(( (teachers[i].birthday.tm_mon >= 10) ? "%d/" : "0%d/" ), teachers[i].birthday.tm_mon);
+      printf("%d\n", teachers[i].birthday.tm_year);
+    }
+  }
+
+  puts("\nAlunos:");
+
+  for (int i = 0; i < *studentAmount; i++) {
+    if (students[i].birthday.tm_mon == (localTime->tm_mon + 1) && students[i].active) {
+      printf("%s - ", students[i].name);
+      printf(( (students[i].birthday.tm_mday >= 10) ? "%d/" : "0%d/" ), students[i].birthday.tm_mday);
+      printf(( (students[i].birthday.tm_mon >= 10) ? "%d/" : "0%d/" ), students[i].birthday.tm_mon);
+      printf("%d\n", students[i].birthday.tm_year);
+    }
+  }
+}
+
+void searchPersonByString(Person *teachers, int *teacherAmount, Person *students, int *studentAmount) {
+  char searchString[MAX_NAME_SIZE];
+  
+  while(getchar() != '\n');
+
+  puts("Pesquisar (Mínimo 3 caracteres):");
+
+  fgets(searchString, MAX_NAME_SIZE, stdin);
+  clearBuffer(searchString);
+
+  if (strlen(searchString) < 3) {
+    puts("Insira pelo menos 3 caracteres.");
+    return;
+  }
+
+  puts("\nProfessor/Aluno - Matrícula - Nome\n");
+
+  for (int i = 0; i < *teacherAmount; ++i) {
+    if (strstr(teachers[i].name, searchString) != NULL) {
+        printf("Professor - %ld - %s\n", teachers[i].id, teachers[i].name);
+    }
+  }
+
+  for (int i = 0; i < *studentAmount; ++i) {
+    if (strstr(students[i].name, searchString) != NULL) {
+        printf("Aluno - %ld - %s\n", students[i].id, students[i].name);
+    }
+  }
+  
 }

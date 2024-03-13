@@ -2,7 +2,12 @@
 #define PERSON_H
 
 #include "../util/utils.h"
+#include "../subject/subject.h"
 #include "time.h"
+
+struct subject;
+typedef struct subject Subject;
+
 
 typedef struct person {
   long id;
@@ -11,7 +16,10 @@ typedef struct person {
   char CPF[12];
   Date birthday;
   int active;
+  Subject *subjects[10];
+  int subjectAmount;
 } Person;
+
 
 void getPerson(Person *person);
 
@@ -22,5 +30,9 @@ int comparePersonsByName(const void *a, const void *b);
 void getOrderedPersons(Person persons[], int numPersons, int (*func)(const void *a, const void *b));
 
 void setPerson(Person *person);
+
+void getCurrentMonthsBirthday(Person *teachers, int *teacherAmount, Person *students, int *studentAmount);
+
+void searchPersonByString(Person *teachers, int *teacherAmount, Person *students, int *studentAmount);
 
 #endif

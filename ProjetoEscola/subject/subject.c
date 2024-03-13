@@ -34,13 +34,15 @@ int getSubject(Subject *subjects, int *subjectAmount) {
     return -1;
   };
 
-  printf("Código da disciplina: %s\n", subjects[subject].subjectCode);
-  printf("Nome da disciplina: %s\n", subjects[subject].name);
-  printf("Professor da disciplina: %s\n", subjects[subject].teacher->name);
-  printf("Quantidade de alunos matriculados nessa disciplina: %d\n", subjects[subject].studentAmount);
-  printf("Semestre: %d\n", subjects[subject].semester);
-
   return subject;
+}
+
+void printSubject(Subject *subject) {
+  printf("Código da disciplina: %s\n", subject->subjectCode);
+  printf("Nome da disciplina: %s\n", subject->name);
+  printf("Professor da disciplina: %s\n", subject->teacher->name);
+  printf("Quantidade de alunos matriculados nessa disciplina: %d\n", subject->studentAmount);
+  printf("Semestre: %d\n", subject->semester);
 }
 
 

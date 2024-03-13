@@ -4,12 +4,14 @@
 
 #include "../util/utils.h"
 #include "../person/person.h"
+#include "../subject/subject.h"
 
 
 void createStudent(Person *students, int *studentAmount) {
   setPerson(&students[*studentAmount]);
   students[*studentAmount].id = *studentAmount;
   students[*studentAmount].active = 1;
+  students[*studentAmount].subjectAmount = 0;
 
   (*studentAmount)++;
 
@@ -98,6 +100,20 @@ void deleteStudent(Person *students, int *studentAmount) {
   puts("\nAluno removido com sucesso.\n");
 }
 
+
+void enrollStudentIntoSubject(Person *students, int *studentAmount, Subject *subjects, int *subjectAmount) {
+  int studentPosition = getStudent(students, studentAmount);
+  Subject *subject = getSubject(subjects, subjectAmount);
+
+  Person student = students[studentPosition];
+
+  student.subjects[student.subjectAmount] = subject;
+  student.subjectAmount++;
+
+  printf("Aluno matriculado em %s com sucesso.\n", subject->name);
+}
+
+
 void getAllStudentsMenu(Person *students, int *studentAmount) {
   int option = 0;
   
@@ -118,7 +134,7 @@ void getAllStudentsMenu(Person *students, int *studentAmount) {
   else puts("Opção inválida.\n\n");
 };
 
-void studentMenu(Person *students, int *studentAmount) {
+void studentMenu(Person *students, int *studentAmount, Subject *subjects, int *subjectAmount) {
   int option = 0;
   
   while (1) {
@@ -128,7 +144,8 @@ void studentMenu(Person *students, int *studentAmount) {
     puts("3 - Matricular aluno.");
     puts("4 - Atualizar aluno.");
     puts("5 - Excluir aluno.");
-    puts("6 - Voltar ao menu principal.\n");
+    puts("6 - Matricular aluno em uma disciplina.");
+    puts("7 - Voltar ao menu principal.\n");
 
     scanf("%d", &option);
     
@@ -137,7 +154,8 @@ void studentMenu(Person *students, int *studentAmount) {
     else if (option == 3) createStudent(students, studentAmount);
     else if (option == 4) updateStudent(students, studentAmount);
     else if (option == 5) deleteStudent(students, studentAmount);
-    else if (option == 6) return;
+    else if (option == 6) enrollStudentIntoSubject(students, studentAmount, subjects, subjectAmount);
+    else if (option == 7) return;
     else puts("Opção inválida.\n\n");
   }
 }

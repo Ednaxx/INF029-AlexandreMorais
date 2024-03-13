@@ -3,7 +3,9 @@
 
 #include "./student/student.h"
 #include "./teacher/teacher.h"
+#include "./person/person.h"
 #include "./subject/subject.h"
+
 
 int main(void) {
   Person students[MAX_RECORDS];
@@ -22,14 +24,18 @@ int main(void) {
     puts("1 - Aluno");
     puts("2 - Professor");
     puts("3 - Disciplina");
-    puts("4 - Sair\n");
+    puts("4 - Aniversariantes do mês.");
+    puts("5 - Busque por uma pessoa cadastrada.");
+    puts("6 - Sair\n");
 
     scanf("%d", &option);
 
     if (option == 1) studentMenu(students, &studentAmount);
-    if (option == 2) teacherMenu(teachers, &teacherAmount);
-    if (option == 3) subjectMenu(subjects, &subjectAmount, students, &studentAmount, teachers, &teacherAmount);
-    if (option == 4) break;
+    else if (option == 2) teacherMenu(teachers, &teacherAmount);
+    else if (option == 3) subjectMenu(subjects, &subjectAmount, students, &studentAmount, teachers, &teacherAmount);
+    else if (option == 4) getCurrentMonthsBirthday(teachers, &teacherAmount, students, &studentAmount);
+    else if (option == 5) searchPersonByString(teachers, &teacherAmount, students, &studentAmount);
+    else if (option == 6) break;
     else puts("Opção inválida.\n");
   };
   
