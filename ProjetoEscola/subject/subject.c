@@ -10,6 +10,11 @@
 
 
 void getAllSubjects(Subject *subjects, int *subjectAmount) {
+  if (*subjectAmount == 0) {
+    puts("Nenhuma matéria cadastrada.");
+    return;
+  }
+  
   puts("\nCódigo - Nome da disciplina.");
   for (int i = 0; i < *subjectAmount; i++) {
     if (subjects[i].active == 1) printf("%s - %s\n", subjects[i].subjectCode, subjects[i].name);
@@ -26,9 +31,12 @@ int getSubject(Subject *subjects, int *subjectAmount) {
   clearBuffer(subjectCode);
 
   for (int i = 0; i < *subjectAmount; i++) {
-    if (strcmp(subjects[i].subjectCode, subjectCode) == 0 && subjects[i].active) subject = i;
-    break;
+    if (strcmp(subjects[i].subjectCode, subjectCode) == 0 && subjects[i].active) {
+      subject = i;
+      break;
+    }
   }
+  
   if (subject < 0) {
     puts("Disciplina não encontrada.");
     return -1;
@@ -45,6 +53,10 @@ void printSubject(Subject *subject) {
   printf("Semestre: %d\n", subject->semester);
 }
 
+void getSubjectStudents(Subject *subject) {
+  // TODO: IMPLEMENT THIS
+  return;
+}
 
 
 int validateSubjectName(char *name) {
@@ -186,7 +198,7 @@ void deleteSubject(Subject *subjects, int *subjectAmount) {
 
   if (subject < 0) return;
 
-  subjectAmount--;
+  (*subjectAmount)--;
   for (int i = subject; i < *subjectAmount; i++) {
     subjects[i] = subjects[i + 1];
   }
@@ -212,7 +224,10 @@ void subjectMenu(Subject *subjects, int *subjectAmount, Person *students, int *s
     scanf("%d", &option);
 
     if (option == 1) getAllSubjects(subjects, subjectAmount);
-    else if (option == 2) getSubject(subjects, subjectAmount);
+    else if (option == 2) {
+      int subject = getSubject(subjects, subjectAmount);
+      printSubject(&subjects[subject]);
+    }
     else if (option == 3) createSubject(subjects, subjectAmount, teachers, teacherAmount);
     else if (option == 4) updateSubject(subjects, subjectAmount, teachers, teacherAmount);
     else if (option == 5) deleteSubject(subjects, subjectAmount);

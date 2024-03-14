@@ -207,7 +207,14 @@ void setPerson(Person *person) {
   setPersonBirthday(person);
 }
 
+
+
 void getCurrentMonthsBirthday(Person *teachers, int *teacherAmount, Person *students, int *studentAmount) {
+  if (*teacherAmount == 0 && *studentAmount == 0) {
+    puts("Não há pessoas cadastradas.");
+    return;
+  }
+  
   time_t currentTime;
   Date *localTime;
 
@@ -239,7 +246,14 @@ void getCurrentMonthsBirthday(Person *teachers, int *teacherAmount, Person *stud
   }
 }
 
+
+
 void searchPersonByString(Person *teachers, int *teacherAmount, Person *students, int *studentAmount) {
+  if (*teacherAmount == 0 && *studentAmount == 0) {
+    puts("Não há pessoas cadastradas.");
+    return;
+  }
+  
   char searchString[MAX_NAME_SIZE];
   
   while(getchar() != '\n');

@@ -17,6 +17,11 @@ void createTeacher(Person *teachers, int *teacherAmount) {
 }
 
 void getAllTeachers(Person *teachers, int *teacherAmount) {
+  if (*teacherAmount == 0) {
+    puts("Nenhum professor matriculado.");
+    return;
+  }
+  
   puts("\nMatrícula - Nome do professor");
   for (int i = 0; i < *teacherAmount; i++) {
     if (teachers[i].active == 1) printf("%ld - %s\n", teachers[i].id, teachers[i].name);
@@ -109,7 +114,7 @@ void deleteTeacher(Person *teachers, int *teacherAmount) {
 
   if (teacher < 0) return;
 
-  teacherAmount--;
+  (*teacherAmount)--;
   for (int i = teacher; i < *teacherAmount; i++) {
     teachers[i] = teachers[i + 1];
   }

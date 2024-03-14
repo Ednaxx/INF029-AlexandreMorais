@@ -19,6 +19,11 @@ void createStudent(Person *students, int *studentAmount) {
 }
 
 void getAllStudents(Person *students, int *studentAmount) {
+  if (*studentAmount == 0) {
+    puts("Nenhum aluno matriculado.");
+    return;
+  }
+  
   puts("\nMatrícula - Nome do aluno");
   for (int i = 0; i < *studentAmount; i++) {
     if (students[i].active == 1) printf("%ld - %s\n", students[i].id, students[i].name);
@@ -72,7 +77,6 @@ int getStudent(Person *students, int *studentAmount) {
     return -1;
   };
   
-  getPerson(&students[student]);
   return student;
 }
 
@@ -91,7 +95,7 @@ void deleteStudent(Person *students, int *studentAmount) {
 
   if (student < 0) return;
 
-  studentAmount--;
+  (*studentAmount)--;
   for (int i = student; i < *studentAmount; i++) {
     students[i] = students[i + 1];
   }
@@ -103,14 +107,26 @@ void deleteStudent(Person *students, int *studentAmount) {
 
 void enrollStudentIntoSubject(Person *students, int *studentAmount, Subject *subjects, int *subjectAmount) {
   int studentPosition = getStudent(students, studentAmount);
-  Subject *subject = getSubject(subjects, subjectAmount);
+  if (studentPosition < 0) return;
 
-  Person student = students[studentPosition];
+  Person *student = &students[studentPosition];
 
-  student.subjects[student.subjectAmount] = subject;
-  student.subjectAmount++;
+  if (student->subjectAmount == 10) {
+    puts("Número máximo de disciplinas matriculadas (10) já alcançado. Por favor remova pelo menos uma antes de tentar novamente.");
+    return;
+  }
+  
+  int subject = getSubject(subjects, subjectAmount);
+  if (subject < 0) return;
 
-  printf("Aluno matriculado em %s com sucesso.\n", subject->name);
+  student->subjects[student->subjectAmount] = &subjects[subject];
+  student->subjectAmount++;
+
+  printf("Aluno matriculado em %s com sucesso.\n", subjects[subject].name);
+}
+
+void unenrollStudentIntoSubject() {
+  // TODO: IMPLEMENT THIS
 }
 
 
@@ -149,8 +165,14 @@ void studentMenu(Person *students, int *studentAmount, Subject *subjects, int *s
 
     scanf("%d", &option);
     
+    
     if (option == 1) getAllStudentsMenu(students, studentAmount);
-    else if (option == 2) getStudent(students, studentAmount);
+      
+    else if (option == 2) {
+      int student = getStudent(students, studentAmount);
+      getPerson(&students[student]);
+    }
+      
     else if (option == 3) createStudent(students, studentAmount);
     else if (option == 4) updateStudent(students, studentAmount);
     else if (option == 5) deleteStudent(students, studentAmount);
