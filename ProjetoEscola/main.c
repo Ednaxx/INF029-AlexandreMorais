@@ -17,7 +17,6 @@ int main(void) {
   Subject subjects[MAX_RECORDS];
   int subjectAmount = 0;
 
-  int option;
 
   while (1) {
     puts("Bem vindo ao Projeto Escola - Escolha a opção desejada:");
@@ -28,6 +27,7 @@ int main(void) {
     puts("5 - Busque por uma pessoa cadastrada.");
     puts("6 - Sair\n");
 
+    int option;
     scanf("%d", &option);
 
     if (option == 1) studentMenu(students, &studentAmount);

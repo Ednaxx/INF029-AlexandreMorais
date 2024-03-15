@@ -18,8 +18,6 @@ typedef struct subject {
   int active;
 } Subject;
 
-int getSubject(Subject *subjects, int *subjectAmount);
-
 void subjectMenu(Subject *subjects, int *subjectAmount, Person *students, int *studentAmount, Person *teachers, int *teacherAmount);
 
 #endif

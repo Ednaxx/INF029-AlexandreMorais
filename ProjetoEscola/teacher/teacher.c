@@ -7,13 +7,16 @@
 
 
 void createTeacher(Person *teachers, int *teacherAmount) {
-  setPerson(&teachers[*teacherAmount]);
-  teachers[*teacherAmount].id = *teacherAmount;
-  teachers[*teacherAmount].active = 1;
+  Person *teacher = &teachers[*teacherAmount];
+  
+  setPerson(teacher);
+  teacher->id = *teacherAmount;
+  teacher->active = 1;
 
   (*teacherAmount)++;
 
   puts("\nProfessor registrado com sucesso.\n");
+  getPerson(teacher);
 }
 
 void getAllTeachers(Person *teachers, int *teacherAmount) {
@@ -60,22 +63,22 @@ void getAllTeachersBySex(Person *teachers, int *teacherAmount) {
 };
 
 int getTeacher(Person *teachers, int *teacherAmount) {
-  int teacher = -1;
+  if (*teacherAmount == 0) {
+    puts("Nenhum professor matriculado.");
+    return -1;
+  }
+  
   long id;
 
   puts("\nInsira a matrícula do professor:");
   scanf("%ld", &id);
 
   for (int i = 0; i < *teacherAmount; i++) {
-    if (teachers[i].id == id && teachers[i].active) teacher = i;
-    break;
+    if (teachers[i].id == id && teachers[i].active) return i;
   }
-  if (teacher < 0) {
-    puts("Professor não encontrado.");
-    return -1;
-  };
-
-  return teacher;
+  
+  puts("Professor não encontrado.");
+  return -1;
 }
 
 // FIX THIS LATER
