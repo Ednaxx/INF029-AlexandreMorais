@@ -196,10 +196,14 @@ void updateSubject(Subject *subjects, int *subjectAmount, Person *teachers, int 
   puts("\nDisciplina atualizada com sucesso.\n");
 }
 
-void deleteSubject(Subject *subjects, int *subjectAmount) {
+void deleteSubject(Person *students, int *studentAmount, Subject *subjects, int *subjectAmount) {
   int subject = getSubject(subjects, subjectAmount);
 
   if (subject < 0) return;
+
+  for (int i = 0; i < subjects[subject].studentAmount; i++) {
+    unenrollStudentFromSubject(subjects[subject].students[i], students, studentAmount, &subjects[subject], subjects, subjectAmount);
+  }
 
   (*subjectAmount)--;
   for (int i = subject; i < *subjectAmount; i++) {
@@ -238,7 +242,7 @@ void enrollStudentIntoSubject(Person *students, int *studentAmount, Subject *sub
   student->subjects[student->subjectAmount] = subject;
   student->subjectAmount++;
 
-  subject->students[subject->studentAmount];
+  subject->students[subject->studentAmount] = student;
   subject->studentAmount++;
   
   printf("Aluno matriculado em %s com sucesso.\n", subjects[subjectIndex].name);
@@ -274,17 +278,7 @@ void removeFromSubjectsStudentArray(Subject *subject, int position) {
   subject->studentAmount -= 1;
 }
 
-void unenrollStudentFromSubject(Person *students, int *studentAmount, Subject *subjects, int *subjectAmount) {
-  int studentIndex = getStudent(students, studentAmount);
-  if (studentIndex < 0) return;
-
-  Person *student = &students[studentIndex];
-
-  int subjectIndex = getSubject(subjects, subjectAmount);
-  if (subjectIndex < 0) return;
-
-  Subject *subject = &subjects[subjectIndex];
-
+void unenrollStudentFromSubject(Person *student, Person *students, int *studentAmount, Subject *subject, Subject *subjects, int *subjectAmount) {
   for (int i = 0; i < student->subjectAmount; i++) {
     if (student->subjects[i] == subject) {
       removeFromStudentsSubjectArray(student, i);
@@ -323,9 +317,19 @@ void subjectMenu(Subject *subjects, int *subjectAmount, Person *students, int *s
     }
     else if (option == 3) createSubject(subjects, subjectAmount, teachers, teacherAmount);
     else if (option == 4) updateSubject(subjects, subjectAmount, teachers, teacherAmount);
-    else if (option == 5) deleteSubject(subjects, subjectAmount);
+    else if (option == 5) deleteSubject(students, studentAmount, subjects, subjectAmount);
     else if (option == 6) enrollStudentIntoSubject(students, studentAmount, subjects, subjectAmount);
-    else if (option == 7) unenrollStudentFromSubject(students, studentAmount, subjects, subjectAmount);
+      
+    else if (option == 7) {
+      int studentIndex = getStudent(students, studentAmount);
+      if (studentIndex < 0) return;
+
+      int subjectIndex = getSubject(subjects, subjectAmount);
+      if (subjectIndex < 0) return;
+      
+      unenrollStudentFromSubject(&students[studentIndex], students, studentAmount, &subjects[subjectIndex], subjects, subjectAmount);
+    }
+      
     else if (option == 8) return;
     else puts("Opção inválida.\n\n");
   }

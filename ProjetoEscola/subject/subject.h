@@ -18,6 +18,8 @@ typedef struct subject {
   int active;
 } Subject;
 
+void unenrollStudentFromSubject(Person *student, Person *students, int *studentAmount, Subject *subject, Subject *subjects, int *subjectAmount);
+
 void subjectMenu(Subject *subjects, int *subjectAmount, Person *students, int *studentAmount, Person *teachers, int *teacherAmount);
 
 #endif

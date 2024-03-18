@@ -93,13 +93,17 @@ void updateStudent(Person *students, int *studentAmount) {
   puts("\nAluno atualizado com sucesso.\n");
 }
 
-void deleteStudent(Person *students, int *studentAmount) {
-  int student = getStudent(students, studentAmount);
+void deleteStudent(Person *students, int *studentAmount, Subject *subjects, int *subjectAmount) {
+  int studentIndex = getStudent(students, studentAmount);
 
-  if (student < 0) return;
+  if (studentIndex < 0) return;
 
+  for (int i = 0; i < students[studentIndex].subjectAmount; i++) {
+     unenrollStudentFromSubject(&students[studentIndex], students, studentAmount, students[studentIndex].subjects[i], subjects, subjectAmount);
+  }
+  
   (*studentAmount)--;
-  for (int i = student; i < *studentAmount; i++) {
+  for (int i = studentIndex; i < *studentAmount; i++) {
     students[i] = students[i + 1];
   }
   students[*studentAmount].active = 0;
@@ -126,6 +130,7 @@ void getStudentSubjects(Person *students, int *studentAmount) {
 }
 
 
+  
 
 void getAllStudentsMenu(Person *students, int *studentAmount) {
   int option = 0;
@@ -147,7 +152,7 @@ void getAllStudentsMenu(Person *students, int *studentAmount) {
   else puts("Opção inválida.\n\n");
 };
 
-void studentMenu(Person *students, int *studentAmount) {
+void studentMenu(Person *students, int *studentAmount, Subject *subjects, int *subjectAmount) {
   int option = 0;
   
   while (1) {
@@ -172,7 +177,7 @@ void studentMenu(Person *students, int *studentAmount) {
       
     else if (option == 3) createStudent(students, studentAmount);
     else if (option == 4) updateStudent(students, studentAmount);
-    else if (option == 5) deleteStudent(students, studentAmount);
+    else if (option == 5) deleteStudent(students, studentAmount, subjects, subjectAmount);
     else if (option == 6) getStudentSubjects(students, studentAmount);
     else if (option == 7) return;
     else puts("Opção inválida.\n\n");

@@ -30,7 +30,7 @@ int main(void) {
     int option;
     scanf("%d", &option);
 
-    if (option == 1) studentMenu(students, &studentAmount);
+    if (option == 1) studentMenu(students, &studentAmount, subjects, &subjectAmount);
     else if (option == 2) teacherMenu(teachers, &teacherAmount);
     else if (option == 3) subjectMenu(subjects, &subjectAmount, students, &studentAmount, teachers, &teacherAmount);
     else if (option == 4) getCurrentMonthsBirthday(teachers, &teacherAmount, students, &studentAmount);
