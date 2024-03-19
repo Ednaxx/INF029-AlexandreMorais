@@ -72,7 +72,7 @@ int getStudent(Person *students, int *studentAmount) {
   
   long id;
 
-  puts("\nInsira a matrícula:");
+  puts("\nInsira a matrícula do aluno:");
   scanf("%ld", &id);
 
   for (int i = 0; i < *studentAmount; i++) {
@@ -82,6 +82,22 @@ int getStudent(Person *students, int *studentAmount) {
   puts("Aluno não encontrado.");
   return -1;
 }
+
+void getStudentsOnFewSubjects(Person *students, int *studentAmount) {
+  if (*studentAmount == 0) {
+    puts("Nenhum aluno matriculado.");
+    return;
+  }
+
+  puts("Alunos matriculados em menos de 3 disciplinas (matrícula - nome):\n");
+
+  for (int i = 0; i < *studentAmount; i++) {
+    if (students[i].subjectAmount < 3) {
+      printf("- %ld - %s\n", students[i].id, students[i].name);
+    }
+  }
+}
+
 
 void updateStudent(Person *students, int *studentAmount) {
   int student = getStudent(students, studentAmount);
@@ -140,7 +156,8 @@ void getAllStudentsMenu(Person *students, int *studentAmount) {
   puts("2 - Listar alunos em ordem alfabética.");
   puts("3 - Listar todos alunos em ordem de aniversário.");
   puts("4 - Listar alunos por gênero.");
-  puts("5 - Voltar ao menu anterior.");
+  puts("5 - Listar alunos matriculados em menos de 3 matérias.");
+  puts("6 - Voltar ao menu anterior.");
 
   scanf("%d", &option);
 
@@ -148,7 +165,8 @@ void getAllStudentsMenu(Person *students, int *studentAmount) {
   else if (option == 2) getAllStudentsOrderedByName(students, studentAmount);
   else if (option == 3) getAllStudentsOrderedByBirthday(students, studentAmount);
   else if (option == 4) getAllStudentsBySex(students, studentAmount);
-  else if (option == 5) return;
+  else if (option == 5) getStudentsOnFewSubjects(students, studentAmount);
+  else if (option == 6) return;
   else puts("Opção inválida.\n\n");
 };
 

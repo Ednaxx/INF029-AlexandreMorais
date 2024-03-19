@@ -51,9 +51,38 @@ void printSubject(Subject *subject) {
   printf("Semestre: %d\n", subject->semester);
 }
 
-void getSubjectStudents(Subject *subject) {
-  // TODO: IMPLEMENT THIS
-  return;
+void getSubjectStudents(Subject *subjects, int *subjectAmount) {
+  if (*subjectAmount == 0) {
+    puts("Nenhuma matéria cadastrada.");
+    return;
+  }
+  
+  int subjectIndex = getSubject(subjects, subjectAmount);
+
+  if (subjects[subjectIndex].studentAmount == 0) {
+    puts("Nenhum aluno matriculado nessa matéria.\n");
+  }
+
+  printf("Alunos matriculados em %s (matrícula - nome):\n\n", subjects[subjectIndex].name);
+  
+  for (int i = 0; i < subjects[subjectIndex].studentAmount; i++) {
+    printf("- %ld - %s\n", subjects[subjectIndex].students[i]->id, subjects[subjectIndex].students[i]->name);
+  }
+}
+
+void getSubjectsWithManyStudents(Subject *subjects, int *subjectAmount) {
+  if (*subjectAmount == 0) {
+    puts("Nenhuma matéria cadastrada.");
+    return;
+  }
+
+  puts("Matérias com mais de 40 alunos matriculados (código - nome - professor):\n");
+
+  for (int i = 0; i < *subjectAmount; i++) {
+    if (subjects[i].studentAmount > 40) {
+      printf("- %s - %s - %s\n", subjects[i].subjectCode, subjects[i].name, subjects[i].teacher->name);
+    }
+  }
 }
 
 
@@ -168,7 +197,7 @@ void setSubject(Subject *subject, Subject *subjects, int *subjectAmount, Person 
 
   setSubjectCode(subject, subjects, subjectAmount);
   setSubjectName(subject);
-  // setSubjectTeacher(subject, teachers, teacherAmount);
+  setSubjectTeacher(subject, teachers, teacherAmount);
   setSubjectSemester(subject);
 }
 
@@ -283,7 +312,7 @@ void unenrollStudentFromSubject(Person *student, Person *students, int *studentA
     if (student->subjects[i] == subject) {
       removeFromStudentsSubjectArray(student, i);
       removeFromSubjectsStudentArray(subject, i);
-      puts("Aluno desmatriculado com sucesso");
+      puts("Aluno desmatriculado com sucesso.");
       return;
     }
   }
@@ -301,26 +330,32 @@ void subjectMenu(Subject *subjects, int *subjectAmount, Person *students, int *s
     puts("\nDisciplinas - Escolha a opção desejada:");
     puts("1 - Listar matérias.");
     puts("2 - Buscar disciplina por código.");
-    puts("3 - Cadastrar matéria.");
-    puts("4 - Atualizar matéria.");
-    puts("5 - Excluir matéria.");
-    puts("6 - Matricular aluno em uma disciplina.");
-    puts("7 - Desmatricular aluno em uma disciplina.");
-    puts("8 - Voltar ao menu principal.\n");
+    puts("3 - Listar alunos matriculados na matéria.");
+    puts("4 - Listar matérias com mais de 40 alunos matriculados.");
+    puts("5 - Cadastrar matéria.");
+    puts("6 - Atualizar matéria.");
+    puts("7 - Excluir matéria.");
+    puts("8 - Matricular aluno em uma disciplina.");
+    puts("9 - Desmatricular aluno em uma disciplina.");
+    puts("10 - Voltar ao menu principal.\n");
 
     scanf("%d", &option);
 
     if (option == 1) getAllSubjects(subjects, subjectAmount);
+      
     else if (option == 2) {
       int subject = getSubject(subjects, subjectAmount);
       printSubject(&subjects[subject]);
     }
-    else if (option == 3) createSubject(subjects, subjectAmount, teachers, teacherAmount);
-    else if (option == 4) updateSubject(subjects, subjectAmount, teachers, teacherAmount);
-    else if (option == 5) deleteSubject(students, studentAmount, subjects, subjectAmount);
-    else if (option == 6) enrollStudentIntoSubject(students, studentAmount, subjects, subjectAmount);
       
-    else if (option == 7) {
+    else if (option == 3) getSubjectStudents(subjects, subjectAmount);
+    else if (option == 4) getSubjectsWithManyStudents(subjects, subjectAmount);
+    else if (option == 5) createSubject(subjects, subjectAmount, teachers, teacherAmount);
+    else if (option == 6) updateSubject(subjects, subjectAmount, teachers, teacherAmount);
+    else if (option == 7) deleteSubject(students, studentAmount, subjects, subjectAmount);
+    else if (option == 8) enrollStudentIntoSubject(students, studentAmount, subjects, subjectAmount);
+      
+    else if (option == 9) {
       int studentIndex = getStudent(students, studentAmount);
       if (studentIndex < 0) return;
 
@@ -330,7 +365,7 @@ void subjectMenu(Subject *subjects, int *subjectAmount, Person *students, int *s
       unenrollStudentFromSubject(&students[studentIndex], students, studentAmount, &subjects[subjectIndex], subjects, subjectAmount);
     }
       
-    else if (option == 8) return;
+    else if (option == 10) return;
     else puts("Opção inválida.\n\n");
   }
 }
