@@ -71,7 +71,11 @@ int validateGender(int gender) {
   return 1;
 }
 
-int validateCPF(char *CPF) {
+int validateCPF(char *CPF, Person *person, Person *persons, int *personAmount) {
+  for (int i = 0; i < *personAmount; i++) {
+    if (strcmp(CPF, persons[i].CPF) == 0) return 0; 
+  }
+  
   if (strlen(CPF) != 11) return 0;
 
   for (int i = 0; i < 11; i++) {
@@ -80,10 +84,10 @@ int validateCPF(char *CPF) {
 
   // Check CPF format
   long invalidFormats[10] = {
-    00000000000, 11111111111, 22222222222, 
-    33333333333, 44444444444, 55555555555, 
-    66666666666, 77777777777, 88888888888, 
-    99999999999};
+  00000000000L, 11111111111L, 22222222222L, 
+  33333333333L, 44444444444L, 55555555555L, 
+  66666666666L, 77777777777L, 88888888888L, 
+  99999999999L};
   
   long cpfValue = atol(CPF);
 
@@ -144,7 +148,7 @@ void setPersonName(Person *person) {
     return;
   }
 
-  puts("Nome inválido. Por favor se atente ao limite de caracteres e só utilize letras.");
+  puts("Nome inválido. Por favor se atente ao limite de caracteres e só utilize letras.\n");
   setPersonName(person);
 }
 
@@ -160,32 +164,32 @@ void setPersonGender(Person *person) {
     return;
   }
 
-  puts("Sexo inválido. Por favor insira '0' para masculino ou '1' feminino.");
+  puts("Sexo inválido. Por favor insira '0' para masculino ou '1' feminino.\n");
   setPersonGender(person);
 }
 
-void setPersonCPF(Person *person) {
-  char CPF[12];
+void setPersonCPF(Person *person, Person *persons, int *personAmount) {
+  char CPF[MAX_CPF_SIZE];
   
   puts("Insira o CPF:");
-  fgets(CPF, 12, stdin);
+  fgets(CPF, MAX_CPF_SIZE, stdin);
 
   clearBuffer(CPF);
 
-  if (validateCPF(CPF)) {
+  if (validateCPF(CPF, person, persons, personAmount)) {
     strcpy(person->CPF, CPF);
     return;
   }
 
-  puts("CPF inválido.");
-  setPersonCPF(person);
+  puts("CPF inválido ou já cadastrado.\n");
+  setPersonCPF(person, persons, personAmount);
 }
 
 void setPersonBirthday(Person *person) {
-  char birthdayInput[12];
+  char birthdayInput[MAX_BIRTHDAY_SIZE];
   
   puts("Insira o aniversário (dd/mm/yyyy):");
-  fgets(birthdayInput, 12, stdin);
+  fgets(birthdayInput, MAX_BIRTHDAY_SIZE, stdin);
 
   clearBuffer(birthdayInput);
 
@@ -198,12 +202,12 @@ void setPersonBirthday(Person *person) {
   setPersonBirthday(person);
 }
 
-void setPerson(Person *person) {
+void setPerson(Person *person, Person *persons, int *personAmount) {
   while(getchar() != '\n');
   
   setPersonName(person);
   setPersonGender(person);
-  setPersonCPF(person);
+  setPersonCPF(person, persons, personAmount);
   setPersonBirthday(person);
 }
 
@@ -211,7 +215,7 @@ void setPerson(Person *person) {
 
 void getCurrentMonthsBirthday(Person *teachers, int *teacherAmount, Person *students, int *studentAmount) {
   if (*teacherAmount == 0 && *studentAmount == 0) {
-    puts("Não há pessoas cadastradas.");
+    puts("Não há pessoas cadastradas.\n");
     return;
   }
   
@@ -250,7 +254,7 @@ void getCurrentMonthsBirthday(Person *teachers, int *teacherAmount, Person *stud
 
 void searchPersonByString(Person *teachers, int *teacherAmount, Person *students, int *studentAmount) {
   if (*teacherAmount == 0 && *studentAmount == 0) {
-    puts("Não há pessoas cadastradas.");
+    puts("Não há pessoas cadastradas.\n");
     return;
   }
   

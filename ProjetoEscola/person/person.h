@@ -13,7 +13,7 @@ typedef struct person {
   long id;
   char name[MAX_NAME_SIZE];
   int gender;
-  char CPF[12];
+  char CPF[MAX_CPF_SIZE];
   Date birthday;
   int active;
   Subject *subjects[10];
@@ -29,7 +29,7 @@ int comparePersonsByName(const void *a, const void *b);
 
 void getOrderedPersons(Person persons[], int numPersons, int (*func)(const void *a, const void *b));
 
-void setPerson(Person *person);
+void setPerson(Person *person, Person *persons, int *personAmount);
 
 void getCurrentMonthsBirthday(Person *teachers, int *teacherAmount, Person *students, int *studentAmount);
 

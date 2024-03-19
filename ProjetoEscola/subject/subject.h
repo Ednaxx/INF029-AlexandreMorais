@@ -10,7 +10,7 @@ typedef struct person Person;
 
 typedef struct subject {
   char name[MAX_NAME_SIZE];
-  char subjectCode[7];
+  char subjectCode[MAX_SUBJECTCODE_SIZE];
   Person *teacher;
   Person *students[50];
   int studentAmount;

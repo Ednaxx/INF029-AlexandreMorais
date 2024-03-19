@@ -12,7 +12,7 @@
 
 void getAllSubjects(Subject *subjects, int *subjectAmount) {
   if (*subjectAmount == 0) {
-    puts("Nenhuma matéria cadastrada.");
+    puts("Nenhuma matéria cadastrada.\n");
     return;
   }
   
@@ -24,36 +24,36 @@ void getAllSubjects(Subject *subjects, int *subjectAmount) {
 
 int getSubject(Subject *subjects, int *subjectAmount) {
   if (*subjectAmount == 0) {
-    puts("Nenhuma matéria cadastrada.");
+    puts("Nenhuma matéria cadastrada.\n");
     return -1;
   }
   
-  char subjectCode[7];
+  char subjectCode[MAX_SUBJECTCODE_SIZE];
 
   while(getchar() != '\n');
   puts("Insira o código da disciplina:");
-  fgets(subjectCode, 7, stdin);
+  fgets(subjectCode, MAX_SUBJECTCODE_SIZE, stdin);
   clearBuffer(subjectCode);
 
   for (int i = 0; i < *subjectAmount; i++) {
     if (strcmp(subjects[i].subjectCode, subjectCode) == 0 && subjects[i].active) return i;
   }
   
-  puts("Disciplina não encontrada.");
+  puts("Disciplina não encontrada.\n");
   return -1;
 }
 
 void printSubject(Subject *subject) {
   printf("Código da disciplina: %s\n", subject->subjectCode);
   printf("Nome da disciplina: %s\n", subject->name);
-  // printf("Professor da disciplina: %s\n", subject->teacher->name);
+  printf("Professor da disciplina: %s\n", subject->teacher->name);
   printf("Quantidade de alunos matriculados nessa disciplina: %d\n", subject->studentAmount);
   printf("Semestre: %d\n", subject->semester);
 }
 
 void getSubjectStudents(Subject *subjects, int *subjectAmount) {
   if (*subjectAmount == 0) {
-    puts("Nenhuma matéria cadastrada.");
+    puts("Nenhuma matéria cadastrada.\n");
     return;
   }
   
@@ -72,7 +72,7 @@ void getSubjectStudents(Subject *subjects, int *subjectAmount) {
 
 void getSubjectsWithManyStudents(Subject *subjects, int *subjectAmount) {
   if (*subjectAmount == 0) {
-    puts("Nenhuma matéria cadastrada.");
+    puts("Nenhuma matéria cadastrada.\n");
     return;
   }
 
@@ -87,7 +87,7 @@ void getSubjectsWithManyStudents(Subject *subjects, int *subjectAmount) {
 
 
 int validateSubjectName(char *name) {
-  if (strlen(name) > 50) return 0;
+  if (strlen(name) > MAX_NAME_SIZE) return 0;
 
   for (size_t i = 0; i < strlen(name); i++) {
       if (!isalpha(name[i]) && !isspace(name[i])) {
@@ -143,7 +143,7 @@ void setSubjectName(Subject *subject) {
     return;
   }
 
-  puts("Nome inválido. Por favor se atente ao limite de caracteres e só utilize letras.");
+  puts("Nome inválido. Por favor se atente ao limite de caracteres e só utilize letras.\n");
   setSubjectName(subject);
 }
 
@@ -159,7 +159,7 @@ void setSubjectCode(Subject *subject, Subject *subjects, int *subjectAmount) {
     return;
   }
 
-  puts("Código inválido. Por favor se atente ao formato (ABC123) e se atente para não inserir um código já existente.");
+  puts("Código inválido. Por favor se atente ao formato (ABC123) para não inserir um código já existente.\n");
   setSubjectCode(subject, subjects, subjectAmount);
 }
 
@@ -171,13 +171,13 @@ void setSubjectTeacher(Subject *subject, Person *teachers, int *teacherAmount) {
     return;
   }
 
-  puts("Professor não encontrado.");
+  puts("Professor não encontrado.\n");
   setSubjectTeacher(subject, teachers, teacherAmount);
 }
 
 void setSubjectSemester(Subject *subject) {
   int semester;
-  puts("Insira o semestre da disciplina.");
+  puts("Insira o semestre da disciplina:");
   scanf("%d", &semester);
 
   while(getchar() != '\n');
@@ -187,7 +187,7 @@ void setSubjectSemester(Subject *subject) {
     return;
   }
 
-  puts("Semestre inválido. Valor deve ser inteiro, positivo e menor que 7.");
+  puts("Semestre inválido. Valor deve ser inteiro, positivo e menor que 7.\n");
   setSubjectSemester(subject);
 }
 
@@ -252,7 +252,7 @@ void enrollStudentIntoSubject(Person *students, int *studentAmount, Subject *sub
   Person *student = &students[studentIndex];
 
   if (student->subjectAmount == 10) {
-    puts("Número máximo de disciplinas matriculadas (10) já alcançado. Por favor remova pelo menos uma antes de tentar novamente.");
+    puts("Número máximo de disciplinas matriculadas (10) já alcançado. Por favor remova pelo menos uma antes de tentar novamente.\n");
     return;
   }
 
@@ -312,12 +312,12 @@ void unenrollStudentFromSubject(Person *student, Person *students, int *studentA
     if (student->subjects[i] == subject) {
       removeFromStudentsSubjectArray(student, i);
       removeFromSubjectsStudentArray(subject, i);
-      puts("Aluno desmatriculado com sucesso.");
+      puts("Aluno desmatriculado com sucesso.\n");
       return;
     }
   }
 
-  puts("Aluno não matriculado nessa matéria.");
+  puts("Aluno não matriculado nessa matéria.\n");
   return;
 }
 

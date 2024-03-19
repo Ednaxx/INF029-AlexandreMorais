@@ -10,7 +10,7 @@
 void createStudent(Person *students, int *studentAmount) {
   Person *student = &students[*studentAmount];
   
-  setPerson(student);
+  setPerson(student, students, studentAmount);
   student->id = *studentAmount;
   student->active = 1;
   student->subjectAmount = 0;
@@ -23,7 +23,7 @@ void createStudent(Person *students, int *studentAmount) {
 
 void getAllStudents(Person *students, int *studentAmount) {
   if (*studentAmount == 0) {
-    puts("Nenhum aluno matriculado.");
+    puts("Nenhum aluno matriculado.\n");
     return;
   }
   
@@ -34,16 +34,31 @@ void getAllStudents(Person *students, int *studentAmount) {
 }
 
 void getAllStudentsOrderedByBirthday(Person *students, int *studentAmount) {
+  if (*studentAmount == 0) {
+    puts("Nenhum aluno matriculado.\n");
+    return;
+  }
+  
   puts("\nMatrícula - Nome do aluno");
   getOrderedPersons(students, *studentAmount, comparePersonsByBirthday);
 }
 
 void getAllStudentsOrderedByName(Person *students, int *studentAmount) {
+  if (*studentAmount == 0) {
+    puts("Nenhum aluno matriculado.\n");
+    return;
+  }
+  
   puts("\nMatrícula - Nome do aluno");
   getOrderedPersons(students, *studentAmount, comparePersonsByName);
 }
 
 void getAllStudentsBySex(Person *students, int *studentAmount) {
+  if (*studentAmount == 0) {
+    puts("Nenhum aluno matriculado.\n");
+    return;
+  }
+  
   int option;
 
   puts("Selecione o sexo do aluno: (0 - Masculino | 1 - Feminino).");
@@ -61,12 +76,12 @@ void getAllStudentsBySex(Person *students, int *studentAmount) {
       if (students[i].active == 1 && !students[i].gender) printf("%ld - %s\n", students[i].id, students[i].name);
     }
   }
-  else puts("Opção inválida.\n\n");
+  else puts("Opção inválida.\n");
 };
 
 int getStudent(Person *students, int *studentAmount) {
   if (*studentAmount == 0) {
-    puts("Nenhum aluno matriculado.");
+    puts("Nenhum aluno matriculado.\n");
     return -1;
   }
   
@@ -85,7 +100,7 @@ int getStudent(Person *students, int *studentAmount) {
 
 void getStudentsOnFewSubjects(Person *students, int *studentAmount) {
   if (*studentAmount == 0) {
-    puts("Nenhum aluno matriculado.");
+    puts("Nenhum aluno matriculado.\n");
     return;
   }
 
@@ -100,16 +115,26 @@ void getStudentsOnFewSubjects(Person *students, int *studentAmount) {
 
 
 void updateStudent(Person *students, int *studentAmount) {
+  if (*studentAmount == 0) {
+    puts("Nenhum aluno matriculado.\n");
+    return;
+  }
+  
   int student = getStudent(students, studentAmount);
   
   if (student < 0) return;
   
-  setPerson(&students[student]);
+  setPerson(&students[student], students, studentAmount);
 
   puts("\nAluno atualizado com sucesso.\n");
 }
 
 void deleteStudent(Person *students, int *studentAmount, Subject *subjects, int *subjectAmount) {
+  if (*studentAmount == 0) {
+    puts("Nenhum aluno matriculado.\n");
+    return;
+  }
+  
   int studentIndex = getStudent(students, studentAmount);
 
   if (studentIndex < 0) return;
@@ -128,14 +153,19 @@ void deleteStudent(Person *students, int *studentAmount, Subject *subjects, int 
 }
 
 
-void getStudentSubjects(Person *students, int *studentAmount) {
+void displayStudentSubjects(Person *students, int *studentAmount) {
+  if (*studentAmount == 0) {
+    puts("Nenhum aluno matriculado.\n");
+    return;
+  }
+  
   int studentIndex = getStudent(students, studentAmount);
   if (studentIndex < 0) return;
   
   Person *student = &students[studentIndex];
 
   if (student->subjectAmount == 0) {
-    puts("Aluno não matriculado em nenhuma disciplina");
+    puts("Aluno não matriculado em nenhuma disciplina.\n");
     return;
   }
 
@@ -167,7 +197,7 @@ void getAllStudentsMenu(Person *students, int *studentAmount) {
   else if (option == 4) getAllStudentsBySex(students, studentAmount);
   else if (option == 5) getStudentsOnFewSubjects(students, studentAmount);
   else if (option == 6) return;
-  else puts("Opção inválida.\n\n");
+  else puts("Opção inválida.\n");
 };
 
 void studentMenu(Person *students, int *studentAmount, Subject *subjects, int *subjectAmount) {
@@ -196,8 +226,8 @@ void studentMenu(Person *students, int *studentAmount, Subject *subjects, int *s
     else if (option == 3) createStudent(students, studentAmount);
     else if (option == 4) updateStudent(students, studentAmount);
     else if (option == 5) deleteStudent(students, studentAmount, subjects, subjectAmount);
-    else if (option == 6) getStudentSubjects(students, studentAmount);
+    else if (option == 6) displayStudentSubjects(students, studentAmount);
     else if (option == 7) return;
-    else puts("Opção inválida.\n\n");
+    else puts("Opção inválida.\n");
   }
 }

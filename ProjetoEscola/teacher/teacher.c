@@ -9,7 +9,7 @@
 void createTeacher(Person *teachers, int *teacherAmount) {
   Person *teacher = &teachers[*teacherAmount];
   
-  setPerson(teacher);
+  setPerson(teacher, teachers, teacherAmount);
   teacher->id = *teacherAmount;
   teacher->active = 1;
 
@@ -21,7 +21,7 @@ void createTeacher(Person *teachers, int *teacherAmount) {
 
 void getAllTeachers(Person *teachers, int *teacherAmount) {
   if (*teacherAmount == 0) {
-    puts("Nenhum professor matriculado.");
+    puts("Nenhum professor matriculado.\n");
     return;
   }
   
@@ -59,12 +59,12 @@ void getAllTeachersBySex(Person *teachers, int *teacherAmount) {
       if (teachers[i].active == 1 && !teachers[i].gender) printf("%ld - %s\n", teachers[i].id, teachers[i].name);
     }
   }
-  else puts("Opção inválida.\n\n");
+  else puts("Opção inválida.\n");
 };
 
 int getTeacher(Person *teachers, int *teacherAmount) {
   if (*teacherAmount == 0) {
-    puts("Nenhum professor matriculado.");
+    puts("Nenhum professor matriculado.\n");
     return -1;
   }
   
@@ -77,11 +77,10 @@ int getTeacher(Person *teachers, int *teacherAmount) {
     if (teachers[i].id == id && teachers[i].active) return i;
   }
   
-  puts("Professor não encontrado.");
+  puts("Professor não encontrado.\n");
   return -1;
 }
 
-// FIX THIS LATER
 
 Person * getTeacherPointer(Person *teachers, int *teacherAmount) {
   int teacher = -1;
@@ -95,7 +94,7 @@ Person * getTeacherPointer(Person *teachers, int *teacherAmount) {
     break;
   }
   if (teacher < 0) {
-    puts("Professor não encontrado.");
+    puts("Professor não encontrado.\n");
     return NULL;
   };
 
@@ -107,7 +106,7 @@ void updateTeacher(Person *teachers, int *teacherAmount) {
 
   if (teacher < 0) return;
 
-  setPerson(&teachers[teacher]);
+  setPerson(&teachers[teacher], teachers, teacherAmount);
 
   puts("\nProfessor atualizado com sucesso.\n");
 }
@@ -143,7 +142,7 @@ void getAllTeachersMenu(Person *teachers, int *teacherAmount) {
   else if (option == 3) getAllTeachersOrderedByBirthday(teachers, teacherAmount);
   else if (option == 4) getAllTeachersBySex(teachers, teacherAmount);
   else if (option == 5) return;
-  else puts("Opção inválida.\n\n");
+  else puts("Opção inválida.\n");
 };
 
 void teacherMenu(Person *teachers, int *teacherAmount) {
@@ -171,6 +170,6 @@ void teacherMenu(Person *teachers, int *teacherAmount) {
     else if (option == 4) updateTeacher(teachers, teacherAmount);
     else if (option == 5) deleteTeacher(teachers, teacherAmount);
     else if (option == 6) return;
-    else puts("Opção inválida.\n\n");
+    else puts("Opção inválida.\n");
   }
 }
