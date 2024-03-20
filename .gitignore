@@ -1,4 +1,5 @@
-ProjetoEscola/build/school
+ProjetoEscola/build/school.*
+.local/*
 
 # Prerequisites
 *.d
