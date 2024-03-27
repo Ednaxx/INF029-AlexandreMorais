@@ -1,5 +1,6 @@
 ProjetoEscola/build/*
-.local
+.local/*
+ProjetoEscola/*.csv
 
 # Prerequisites
 *.d

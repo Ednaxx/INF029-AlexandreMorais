@@ -61,6 +61,7 @@ void getSubjectStudents(Subject *subjects, int *subjectAmount) {
 
   if (subjects[subjectIndex].studentAmount == 0) {
     puts("Nenhum aluno matriculado nessa matéria.\n");
+    return;
   }
 
   printf("Alunos matriculados em %s (matrícula - nome):\n\n", subjects[subjectIndex].name);
