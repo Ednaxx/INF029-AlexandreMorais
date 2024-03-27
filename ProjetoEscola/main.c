@@ -5,6 +5,7 @@
 #include "./teacher/teacher.h"
 #include "./person/person.h"
 #include "./subject/subject.h"
+#include "./repository/repository.h"
 
 
 int main(void) {
@@ -17,6 +18,9 @@ int main(void) {
   Subject subjects[MAX_RECORDS];
   int subjectAmount = 0;
 
+  readTeachersCSV(teachers, &teacherAmount);
+  readStudentsCSV(students, &studentAmount);
+  readSubjectsCSV(subjects, &subjectAmount, teachers, &teacherAmount, students, &studentAmount);
 
   while (1) {
     puts("Bem vindo ao Projeto Escola - Escolha a opção desejada:");
@@ -38,6 +42,10 @@ int main(void) {
     else if (option == 6) break;
     else puts("Opção inválida.\n");
   };
+
+  writeTeachersToCSV(teachers, &teacherAmount);
+  writeStudentsToCSV(students, &studentAmount);
+  writeSubjectsToCSV(subjects, &subjectAmount, students, &studentAmount);
   
   return 0;
 }

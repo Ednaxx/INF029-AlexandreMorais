@@ -345,7 +345,7 @@ void subjectMenu(Subject *subjects, int *subjectAmount, Person *students, int *s
       
     else if (option == 2) {
       int subject = getSubject(subjects, subjectAmount);
-      printSubject(&subjects[subject]);
+      if (subject >= 0) printSubject(&subjects[subject]);
     }
       
     else if (option == 3) getSubjectStudents(subjects, subjectAmount);

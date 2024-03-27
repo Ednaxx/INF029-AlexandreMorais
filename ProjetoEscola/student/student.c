@@ -220,7 +220,7 @@ void studentMenu(Person *students, int *studentAmount, Subject *subjects, int *s
       
     else if (option == 2) {
       int student = getStudent(students, studentAmount);
-      getPerson(&students[student]);
+      if (student >= 0) getPerson(&students[student]);
     }
       
     else if (option == 3) createStudent(students, studentAmount);

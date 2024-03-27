@@ -163,7 +163,7 @@ void teacherMenu(Person *teachers, int *teacherAmount) {
       
     else if (option == 2) {
       int teacher = getTeacher(teachers, teacherAmount);
-      getPerson(&teachers[teacher]);
+      if (teacher >= 0) getPerson(&teachers[teacher]);
     }
       
     else if (option == 3) createTeacher(teachers, teacherAmount);
