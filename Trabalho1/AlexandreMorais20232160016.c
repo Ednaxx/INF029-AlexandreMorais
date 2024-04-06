@@ -131,8 +131,6 @@ DataQuebrada quebraData(char data[]){
   if (dq.iAno < 100) dq.iAno += 2000;
 
 	dq.valido = 1;
-
-  if (dq.valido) printf("\n%d/%d/%d\n", dq.iDia, dq.iMes, dq.iAno);
   
   return dq;
 }
@@ -151,14 +149,18 @@ DataQuebrada quebraData(char data[]){
     pode utilizar strlen para pegar o tamanho da string
  */
 
-int mesTem30Dias(int mes) {
-  int meses30dias[] = {4, 6, 9, 11};
+int mesNaoTem31Dias(int mes) {
+  int meses30dias[] = {2, 4, 6, 9, 11};
 
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < 5; i++) {
     if (mes == meses30dias[i]) return 1;
   }
 
   return 0;
+}
+
+int ehAnoBissexto(int ano) {
+  return (ano % 4 == 0 && ano % 100 != 0) || (ano % 400 == 0);
 }
 
 int q1(char data[])
@@ -166,17 +168,14 @@ int q1(char data[])
   DataQuebrada dataQuebrada = quebraData(data);
   if (dataQuebrada.valido == 0) return 0;
 
-  if (dataQuebrada.iAno < 1) return 0;
+  if (dataQuebrada.iAno < 1 || dataQuebrada.iMes < 1 || dataQuebrada.iMes > 12
+    || dataQuebrada.iDia < 1 || dataQuebrada.iDia > 31) return 0;
 
-  if (dataQuebrada.iMes < 1 || dataQuebrada.iMes > 12) return 0;
+  if (dataQuebrada.iDia == 31 && mesNaoTem31Dias(dataQuebrada.iMes)) return 0;
 
-  if (dataQuebrada.iDia < 1) return 0;
+  if (dataQuebrada.iDia > 29 && dataQuebrada.iMes == 2) return 0;
 
-  if (dataQuebrada.iDia > 31) return 0;
-
-  if (dataQuebrada.iDia == 31 && !mesTem30Dias(dataQuebrada.iMes)) return 0;
-
-  if (dataQuebrada.iAno % 4 != 0 && dataQuebrada.iMes == 2 && dataQuebrada.iDia > 28) return 0;
+  if (!ehAnoBissexto(dataQuebrada.iAno) && dataQuebrada.iMes == 2 && dataQuebrada.iDia == 29) return 0;
 
   return 1;
 }
@@ -197,21 +196,23 @@ int q1(char data[])
     4 -> datainicial > datafinal
     Caso o cálculo esteja correto, os atributos qtdDias, qtdMeses e qtdAnos devem ser preenchidos com os valores correspondentes.
  */
+
 DiasMesesAnos q2(char datainicial[], char datafinal[])
 {
   DiasMesesAnos dma;
   DataQuebrada dataInicialQuebrada = quebraData(datainicial);
   DataQuebrada dataFinalQuebrada = quebraData(datafinal);
 
-  if (q1(datainicial) == 0){
+  if (q1(datainicial) == 0) {
     dma.retorno = 2;
     return dma;
   }
 
-  if (q1(datafinal) == 0){
+  if (q1(datafinal) == 0) {
     dma.retorno = 3;
     return dma;
   }
+  
 
   if (dataFinalQuebrada.iAno < dataInicialQuebrada.iAno) {
     dma.retorno = 4;
