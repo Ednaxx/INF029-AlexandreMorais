@@ -181,7 +181,6 @@ int q1(char data[])
 }
 
 
-
 /*
  Q2 = diferença entre duas datas
  @objetivo
@@ -197,12 +196,64 @@ int q1(char data[])
     Caso o cálculo esteja correto, os atributos qtdDias, qtdMeses e qtdAnos devem ser preenchidos com os valores correspondentes.
  */
 
+int converterDataParaDias(DataQuebrada dataQuebrada) {
+  int dias = dataQuebrada.iDia;
+  
+  for (int i = 1; i <= dataQuebrada.iMes; i++) {
+    if (!mesNaoTem31Dias(i)) dias += 31;
+    else if (i == 2) dias += (ehAnoBissexto(dataQuebrada.iAno) ? 29 : 28);
+    else dias += 30;
+  }
+
+  for (int i = 1; i <= dataQuebrada.iAno; i++) {
+    if (ehAnoBissexto(i)) dias++;
+    dias += 365;
+  }
+
+  return dias;
+}
+
+DiasMesesAnos converterDiasParaData(int dias) {
+  DiasMesesAnos data;
+  data.qtdDias = 0;
+  data.qtdMeses = 0;
+  data.qtdAnos = 0;
+  
+  while (dias >= 365) {
+    if (ehAnoBissexto(data.qtdAnos + 1) && (dias < 366)) break;
+    if (ehAnoBissexto(data.qtdAnos + 1) && (dias >= 366)) dias--;
+    dias -= 365;
+    data.qtdAnos++;
+  }
+
+  if (dias > 30) {
+    dias -= 30;
+    data.qtdMeses++;
+  }
+
+  if (dias > 28) {
+    dias -= 28;
+    data.qtdMeses++;
+  }
+
+  while (dias > 30) {
+    if (!mesNaoTem31Dias(data.qtdMeses + 1)) dias--;
+    dias -= 30;
+    data.qtdMeses++;
+  }
+
+  data.qtdDias += dias;
+    
+  return data;
+}
+
 DiasMesesAnos q2(char datainicial[], char datafinal[])
 {
-  DiasMesesAnos dma;
   DataQuebrada dataInicialQuebrada = quebraData(datainicial);
   DataQuebrada dataFinalQuebrada = quebraData(datafinal);
+  DiasMesesAnos dma;
 
+    
   if (q1(datainicial) == 0) {
     dma.retorno = 2;
     return dma;
@@ -212,7 +263,6 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
     dma.retorno = 3;
     return dma;
   }
-  
 
   if (dataFinalQuebrada.iAno < dataInicialQuebrada.iAno) {
     dma.retorno = 4;
@@ -229,18 +279,20 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
     && dataFinalQuebrada.iDia < dataInicialQuebrada.iDia) {
     dma.retorno = 4;
     return dma;
-    };
-  
+  };
 
-  dma.qtdDias = dataFinalQuebrada.iDia - dataInicialQuebrada.iDia;
-  dma.qtdMeses = dataFinalQuebrada.iMes - dataInicialQuebrada.iMes;
-  dma.qtdAnos = dataFinalQuebrada.iAno - dataInicialQuebrada.iAno;
   
+  
+  int diasDataInicial = converterDataParaDias(dataInicialQuebrada);
+  int diasDataFinal = converterDataParaDias(dataFinalQuebrada);
+
+  int diferencaDeDias = diasDataFinal - diasDataInicial;
+  
+  dma = converterDiasParaData(diferencaDeDias);
   dma.retorno = 1;
-  return dma;
 
-  // TODO - Check for leap years!
-  // Implement proper aritmethics
+  printf("\n\n%d/%d/%d\n\n", dma.qtdDias, dma.qtdMeses, dma.qtdAnos);
+  return dma;
 }
 
 /*
