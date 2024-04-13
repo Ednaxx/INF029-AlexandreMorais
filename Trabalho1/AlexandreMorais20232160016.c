@@ -199,16 +199,13 @@ int q1(char data[])
 int converterDataParaDias(DataQuebrada dataQuebrada) {
   int dias = dataQuebrada.iDia;
   
-  for (int i = 1; i <= dataQuebrada.iMes; i++) {
+  for (int i = 1; i < dataQuebrada.iMes; i++) {
     if (!mesNaoTem31Dias(i)) dias += 31;
     else if (i == 2) dias += (ehAnoBissexto(dataQuebrada.iAno) ? 29 : 28);
     else dias += 30;
   }
 
-  for (int i = 1; i <= dataQuebrada.iAno; i++) {
-    if (ehAnoBissexto(i)) dias++;
-    dias += 365;
-  }
+  for (int i = 1; i < dataQuebrada.iAno; i++) dias += 365;
 
   return dias;
 }
@@ -229,11 +226,11 @@ DiasMesesAnos converterDiasParaData(int dias) {
   if (dias > 30) {
     dias -= 30;
     data.qtdMeses++;
-  }
-
-  if (dias > 28) {
-    dias -= 28;
-    data.qtdMeses++;
+    
+    if (dias > 28) {
+      dias -= 28;
+      data.qtdMeses++;
+    }
   }
 
   while (dias > 30) {
@@ -281,17 +278,19 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
     return dma;
   };
 
-  
+  printf("\n%d/%d/%d - %d/%d/%d\n", 
+    dataFinalQuebrada.iDia, dataFinalQuebrada.iMes, dataFinalQuebrada.iAno,
+    dataInicialQuebrada.iDia, dataInicialQuebrada.iMes, dataInicialQuebrada.iAno);
   
   int diasDataInicial = converterDataParaDias(dataInicialQuebrada);
   int diasDataFinal = converterDataParaDias(dataFinalQuebrada);
-
-  int diferencaDeDias = diasDataFinal - diasDataInicial;
   
+  int diferencaDeDias = diasDataFinal - diasDataInicial;
+  printf("\n%d dias de diferenca\n", diferencaDeDias);
   dma = converterDiasParaData(diferencaDeDias);
   dma.retorno = 1;
 
-  printf("\n\n%d/%d/%d\n\n", dma.qtdDias, dma.qtdMeses, dma.qtdAnos);
+  printf("\n%d/%d/%d\n", dma.qtdDias, dma.qtdMeses, dma.qtdAnos);
   return dma;
 }
 
@@ -305,11 +304,24 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
  @saida
     Um número n >= 0.
  */
-int q3(char *texto, char c, int isCaseSensitive)
-{
-  int qtdOcorrencias = -1;
+int q3(char *texto, char c, int isCaseSensitive) {
+  int qtdOcorrencias = 0;
 
-  return qtdOcorrencias;
+  if (isCaseSensitive) {
+    for (int i = 0; texto[i] != '\0'; i++) {
+      if (texto[i] == c) qtdOcorrencias++;
+    }
+    return qtdOcorrencias;
+  }
+
+  if (c < 97) c += 32;
+
+  if (!isCaseSensitive) {
+    for (int i = 0; texto[i] != '\0'; i++) {
+      if (texto[i] == c || texto[i] + 32 == c) qtdOcorrencias++;
+    }
+    return qtdOcorrencias;
+  }
 }
 
 /*

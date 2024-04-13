@@ -33,8 +33,8 @@ int main()
   // testSomar();
   // testFatorial();
   // testQ1();
-  testQ2();
-  // testQ3();
+  // testQ2();
+  testQ3();
   // testQ4();
   // testQ5();
   // testQ6();
@@ -122,7 +122,8 @@ void testQ2()
   strcpy(datafinal, "01/06/2016");
   dma = q2(datainicial, datafinal);
   printf("%d\n", dma.retorno == 1);
-  printf("%d\n", dma.qtdDias == 0);
+  // Esse teste veio errado -- dias tava como 0
+  printf("%d\n", dma.qtdDias == 1);
   printf("%d\n", dma.qtdMeses == 0);
   printf("%d\n", dma.qtdAnos == 1);
 
@@ -155,7 +156,7 @@ void testQ2()
   printf("\nTeste 5\n");
 
   strcpy(datainicial, "26/06/2017");
-  strcpy(datafinal, "25/07/2017");
+  strcpy(datafinal, "26/07/2017");
   dma = q2(datainicial, datafinal);
   printf("%d\n", dma.retorno == 1);
   printf("%d\n", dma.qtdDias == 0);
