@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include "AlexandreMorais20232160016.h" // Substitua pelo seu arquivo de header renomeado
 #include <stdlib.h>
+
 /*
 ## função utilizada para testes  ##
 
@@ -53,8 +54,7 @@ int somar(int x, int y)
 @saida
     fatorial de x -> x!
  */
-int fatorial(int x)
-{ //função utilizada para testes
+int fatorial(int x) { //função utilizada para testes
   int i, fat = 1;
     
   for (i = x; i > 1; i--)
@@ -63,8 +63,7 @@ int fatorial(int x)
   return fat;
 }
 
-int teste(int a)
-{
+int teste(int a) {
     int val;
     if (a == 2)
         val = 3;
@@ -76,7 +75,7 @@ int teste(int a)
 
 
 
-DataQuebrada quebraData(char data[]){
+DataQuebrada quebraData(char data[]) {
   DataQuebrada dq;
   char sDia[3];
 	char sMes[3];
@@ -150,10 +149,10 @@ DataQuebrada quebraData(char data[]){
  */
 
 int mesNaoTem31Dias(int mes) {
-  int meses30dias[] = {2, 4, 6, 9, 11};
+  int mesesNaoTem31dias[] = {2, 4, 6, 9, 11};
 
   for (int i = 0; i < 5; i++) {
-    if (mes == meses30dias[i]) return 1;
+    if (mes == mesesNaoTem31dias[i]) return 1;
   }
 
   return 0;
@@ -205,8 +204,10 @@ int converterDataParaDias(DataQuebrada dataQuebrada) {
     else dias += 30;
   }
 
-  for (int i = 1; i < dataQuebrada.iAno; i++) dias += 365;
-
+  for (int i = 1; i < dataQuebrada.iAno; i++) {
+    dias += (ehAnoBissexto(i) ? 366 : 365);
+  }
+    
   return dias;
 }
 
@@ -215,34 +216,25 @@ DiasMesesAnos converterDiasParaData(int dias) {
   data.qtdDias = 0;
   data.qtdMeses = 0;
   data.qtdAnos = 0;
-  
-  while (dias >= 365) {
-    if (ehAnoBissexto(data.qtdAnos + 1) && (dias < 366)) break;
-    if (ehAnoBissexto(data.qtdAnos + 1) && (dias >= 366)) dias--;
-    dias -= 365;
+
+  while (dias >= 365 + ehAnoBissexto(data.qtdAnos)) {
+    dias -= 365 + ehAnoBissexto(data.qtdAnos);
     data.qtdAnos++;
   }
 
-  if (dias > 30) {
-    dias -= 30;
-    data.qtdMeses++;
-    
-    if (dias > 28) {
-      dias -= 28;
-      data.qtdMeses++;
-    }
-  }
+  int diasDoMes[12] = {31, 28 + ehAnoBissexto(data.qtdAnos), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-  while (dias > 30) {
-    if (!mesNaoTem31Dias(data.qtdMeses + 1)) dias--;
-    dias -= 30;
+  while (dias >= diasDoMes[data.qtdMeses]) {
+    dias -= diasDoMes[data.qtdMeses];
     data.qtdMeses++;
   }
 
-  data.qtdDias += dias;
-    
+  data.qtdDias = dias;
+
   return data;
 }
+
+
 
 DiasMesesAnos q2(char datainicial[], char datafinal[])
 {
@@ -278,19 +270,15 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
     return dma;
   };
 
-  printf("\n%d/%d/%d - %d/%d/%d\n", 
-    dataFinalQuebrada.iDia, dataFinalQuebrada.iMes, dataFinalQuebrada.iAno,
-    dataInicialQuebrada.iDia, dataInicialQuebrada.iMes, dataInicialQuebrada.iAno);
   
   int diasDataInicial = converterDataParaDias(dataInicialQuebrada);
   int diasDataFinal = converterDataParaDias(dataFinalQuebrada);
   
   int diferencaDeDias = diasDataFinal - diasDataInicial;
-  printf("\n%d dias de diferenca\n", diferencaDeDias);
+  
   dma = converterDiasParaData(diferencaDeDias);
   dma.retorno = 1;
 
-  printf("\n%d/%d/%d\n", dma.qtdDias, dma.qtdMeses, dma.qtdAnos);
   return dma;
 }
 
@@ -322,6 +310,8 @@ int q3(char *texto, char c, int isCaseSensitive) {
     }
     return qtdOcorrencias;
   }
+
+  return -1;
 }
 
 /*
@@ -339,10 +329,43 @@ int q3(char *texto, char c, int isCaseSensitive) {
         O retorno da função, n, nesse caso seria 1;
 
  */
-int q4(char *strTexto, char *strBusca, int posicoes[30])
-{
-  int qtdOcorrencias = -1;
+    
+int q4(char strTexto[], char strBusca[], int posicoes[30]) {
+  int qtdOcorrencias = 0;
+  int posicaoParaAcrescentar = 0;
+    
 
+  for (int i = 0; strTexto[i] != '\0'; i++) {
+    // O buffer conta acentos como dois caracteres
+    // printf("\n%c %d\n", strTexto[i], i + 1);
+    
+    if (strTexto[i] != strBusca[0]) continue;
+    
+    int presente = 1;
+    int aux1 = i;
+    int aux2 = 0;
+    
+    while (strBusca[aux2 + 1] != '\0' && presente) {
+      // printf("\n%c %c %d %d\n", strTexto[aux1], strBusca[aux2], aux1 + 1, i + aux2 + 1);
+      aux1++;
+      aux2++;
+
+      if (strTexto[aux1] != strBusca[aux2] || strTexto[aux1] == '\0') {
+        presente = 0;
+        break;
+      };
+    }
+    
+    if (presente) {
+      // printf("\n%c %c %d %d\n", strTexto[aux1], strBusca[aux2], aux1 + 1, i + aux2 + 1);
+      posicoes[posicaoParaAcrescentar] = i + 1;
+      posicoes[posicaoParaAcrescentar + 1] = i + aux2 + 1;
+    
+      posicaoParaAcrescentar += 2;
+      qtdOcorrencias++;
+    }
+  }
+    
   return qtdOcorrencias;
 }
 
@@ -356,9 +379,30 @@ int q4(char *strTexto, char *strBusca, int posicoes[30])
     Número invertido
  */
 
-int q5(int num)
-{
+int q5(int num) {
+  int ordemDeGrandeza = 0;
+  int aux = num;
 
+  while (aux > 0) {
+    aux /= 10;
+    ordemDeGrandeza++;
+  }
+    
+    
+  int *numeroInversoArray = malloc(ordemDeGrandeza * sizeof(int));
+    
+  for (int i = 0; i < ordemDeGrandeza; i++) {
+    numeroInversoArray[i] = num % 10;
+    num /= 10;
+  }
+
+  for (int i = 0; i < ordemDeGrandeza; i++) {
+    num += numeroInversoArray[i];
+    num *= 10;
+  }
+
+  num /= 10;
+  
   return num;
 }
 
@@ -372,8 +416,59 @@ int q5(int num)
     Quantidade de vezes que número de busca ocorre em número base
  */
 
-int q6(int numerobase, int numerobusca)
-{
-  int qtdOcorrencias;
+int q6(int numeroBase, int numeroBusca) {
+  int qtdOcorrencias = 0;
+  int ordemDeGrandezaNumeroBusca = 0;
+  int ordemDeGrandezaNumeroBase = 0;
+
+    
+  int aux = numeroBusca;
+  while (aux > 0) {
+    aux /= 10;
+    ordemDeGrandezaNumeroBusca++;
+  }
+
+  aux = numeroBase;
+  while (aux > 0) {
+    aux /= 10;
+    ordemDeGrandezaNumeroBase++;
+  }
+  
+
+  for (int i = 0; i < ordemDeGrandezaNumeroBase; i++) {
+    if (numeroBase % 10 != numeroBusca % 10) {
+      numeroBase /= 10;
+      continue;
+    };
+
+    numeroBase /= 10;
+
+    int presente = 1;
+    int aux1 = numeroBusca;
+    int aux2 = numeroBase;
+    
+    for (int j = 1; j < ordemDeGrandezaNumeroBusca && presente; j++) {
+      aux1 /= 10;
+      aux2 /= 10;
+
+      if (aux2 % 10 != aux1 % 10) {
+        presente = 0;
+        break;
+      }
+    }
+
+    if (presente) qtdOcorrencias++;
+  }
+    
   return qtdOcorrencias;
+}
+
+/*
+ Q7 = jogo da velha
+ @objetivo
+    Fazer um programa que implementa o jogo da velha.
+*/
+
+void q7() {
+    return;
 }
