@@ -22,8 +22,10 @@
 // #################################################
 
 #include <stdio.h>
-#include "AlexandreMorais20232160016.h" // Substitua pelo seu arquivo de header renomeado
 #include <stdlib.h>
+#include <string.h>
+#include <wchar.h>
+#include "AlexandreMorais20232160016.h" // Substitua pelo seu arquivo de header renomeado
 
 /*
 ## função utilizada para testes  ##
@@ -195,92 +197,93 @@ int q1(char data[])
     Caso o cálculo esteja correto, os atributos qtdDias, qtdMeses e qtdAnos devem ser preenchidos com os valores correspondentes.
  */
 
-int converterDataParaDias(DataQuebrada dataQuebrada) {
-  int dias = dataQuebrada.iDia;
+// int converterDataParaDias(DataQuebrada dataQuebrada) {
+//   int dias = dataQuebrada.iDia;
   
-  for (int i = 1; i < dataQuebrada.iMes; i++) {
-    if (!mesNaoTem31Dias(i)) dias += 31;
-    else if (i == 2) dias += (ehAnoBissexto(dataQuebrada.iAno) ? 29 : 28);
-    else dias += 30;
-  }
+//   for (int i = 1; i < dataQuebrada.iMes; i++) {
+//     if (!mesNaoTem31Dias(i)) dias += 31;
+//     else if (i == 2) dias += (ehAnoBissexto(dataQuebrada.iAno) ? 29 : 28);
+//     else dias += 30;
+//   }
 
-  for (int i = 1; i < dataQuebrada.iAno; i++) {
-    dias += (ehAnoBissexto(i) ? 366 : 365);
-  }
+//   for (int i = 1; i < dataQuebrada.iAno; i++) {
+//     dias += (ehAnoBissexto(i) ? 366 : 365);
+//   }
     
-  return dias;
-}
+//   return dias;
+// }
 
-DiasMesesAnos converterDiasParaData(int dias) {
-  DiasMesesAnos data;
-  data.qtdDias = 0;
-  data.qtdMeses = 0;
-  data.qtdAnos = 0;
+// DiasMesesAnos converterDiasParaData(int dias) {
+//   DiasMesesAnos data;
+//   data.qtdDias = 0;
+//   data.qtdMeses = 0;
+//   data.qtdAnos = 0;
+    
+//   while (dias >= 365) {
+//     dias -= 365;
+//     data.qtdAnos++;
+//   }
 
-  while (dias >= 365 + ehAnoBissexto(data.qtdAnos)) {
-    dias -= 365 + ehAnoBissexto(data.qtdAnos);
-    data.qtdAnos++;
-  }
+//   int diasDoMes[12] = {31, 28 + ehAnoBissexto(data.qtdAnos), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-  int diasDoMes[12] = {31, 28 + ehAnoBissexto(data.qtdAnos), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+//   while (dias >= diasDoMes[data.qtdMeses]) {
+//     dias -= diasDoMes[data.qtdMeses];
+//     data.qtdMeses++;
+//   };
 
-  while (dias >= diasDoMes[data.qtdMeses]) {
-    dias -= diasDoMes[data.qtdMeses];
-    data.qtdMeses++;
-  }
-
-  data.qtdDias = dias;
-
-  return data;
-}
+//   data.qtdDias = dias;
+  
+//   return data;
+// }
 
 
-
-DiasMesesAnos q2(char datainicial[], char datafinal[])
-{
-  DataQuebrada dataInicialQuebrada = quebraData(datainicial);
-  DataQuebrada dataFinalQuebrada = quebraData(datafinal);
-  DiasMesesAnos dma;
+// DiasMesesAnos q2(char datainicial[], char datafinal[]) {
+//   DataQuebrada dataInicialQuebrada = quebraData(datainicial);
+//   DataQuebrada dataFinalQuebrada = quebraData(datafinal);
+//   DiasMesesAnos dma;
 
     
-  if (q1(datainicial) == 0) {
-    dma.retorno = 2;
-    return dma;
-  }
+//   if (q1(datainicial) == 0) {
+//     dma.retorno = 2;
+//     return dma;
+//   }
 
-  if (q1(datafinal) == 0) {
-    dma.retorno = 3;
-    return dma;
-  }
+//   if (q1(datafinal) == 0) {
+//     dma.retorno = 3;
+//     return dma;
+//   }
 
-  if (dataFinalQuebrada.iAno < dataInicialQuebrada.iAno) {
-    dma.retorno = 4;
-    return dma;
-  };
+//   if (dataFinalQuebrada.iAno < dataInicialQuebrada.iAno) {
+//     dma.retorno = 4;
+//     return dma;
+//   };
 
-  if (dataFinalQuebrada.iAno == dataInicialQuebrada.iAno && dataFinalQuebrada.iMes < dataInicialQuebrada.iMes) {
-    dma.retorno = 4;
-    return dma;
-  };
+//   if (dataFinalQuebrada.iAno == dataInicialQuebrada.iAno && dataFinalQuebrada.iMes < dataInicialQuebrada.iMes) {
+//     dma.retorno = 4;
+//     return dma;
+//   };
 
-  if (dataFinalQuebrada.iAno == dataInicialQuebrada.iAno 
-    && dataFinalQuebrada.iMes == dataInicialQuebrada.iMes
-    && dataFinalQuebrada.iDia < dataInicialQuebrada.iDia) {
-    dma.retorno = 4;
-    return dma;
-  };
+//   if (dataFinalQuebrada.iAno == dataInicialQuebrada.iAno 
+//     && dataFinalQuebrada.iMes == dataInicialQuebrada.iMes
+//     && dataFinalQuebrada.iDia < dataInicialQuebrada.iDia) {
+//     dma.retorno = 4;
+//     return dma;
+//   };
 
   
-  int diasDataInicial = converterDataParaDias(dataInicialQuebrada);
-  int diasDataFinal = converterDataParaDias(dataFinalQuebrada);
+//   int diasDataInicial = converterDataParaDias(dataInicialQuebrada);
+//   int diasDataFinal = converterDataParaDias(dataFinalQuebrada);
+//   int diferencaDeDias = diasDataFinal - diasDataInicial;
+//   printf("\n%s - %s\n", datafinal, datainicial);
+//   printf("\n%d - %d = %d\n", diasDataFinal, diasDataInicial, diferencaDeDias);
   
-  int diferencaDeDias = diasDataFinal - diasDataInicial;
-  
-  dma = converterDiasParaData(diferencaDeDias);
-  dma.retorno = 1;
+//   dma = converterDiasParaData(diferencaDeDias);
+//   dma.retorno = 1;
 
-  return dma;
-}
+//   return dma;
+// }
+
+     DiasMesesAnos q2(char datainicial[], char datafinal[]) {}
 
 /*
  Q3 = encontrar caracter em texto
@@ -332,43 +335,48 @@ int q3(char *texto, char c, int isCaseSensitive) {
     
 int q4(char strTexto[], char strBusca[], int posicoes[30]) {
   int qtdOcorrencias = 0;
+  int qtdAcentos = 0;
   int posicaoParaAcrescentar = 0;
     
 
   for (int i = 0; strTexto[i] != '\0'; i++) {
-    // O buffer conta acentos como dois caracteres
-    // printf("\n%c %d\n", strTexto[i], i + 1);
+    if (strTexto[i] < 0) {
+      qtdAcentos++;
+      i++;
+      continue;
+    };
     
     if (strTexto[i] != strBusca[0]) continue;
+
     
     int presente = 1;
-    int aux1 = i;
-    int aux2 = 0;
+    int auxTexto = i;
+    int iteradorBusca = 0;
     
-    while (strBusca[aux2 + 1] != '\0' && presente) {
-      // printf("\n%c %c %d %d\n", strTexto[aux1], strBusca[aux2], aux1 + 1, i + aux2 + 1);
-      aux1++;
-      aux2++;
+    while (strBusca[iteradorBusca + 1] != '\0' && presente) {
+      auxTexto++;
+      iteradorBusca++;
 
-      if (strTexto[aux1] != strBusca[aux2] || strTexto[aux1] == '\0') {
+      if (strTexto[auxTexto] != strBusca[iteradorBusca] || strTexto[auxTexto] == '\0') {
         presente = 0;
         break;
       };
     }
     
     if (presente) {
-      // printf("\n%c %c %d %d\n", strTexto[aux1], strBusca[aux2], aux1 + 1, i + aux2 + 1);
-      posicoes[posicaoParaAcrescentar] = i + 1;
-      posicoes[posicaoParaAcrescentar + 1] = i + aux2 + 1;
+      posicoes[posicaoParaAcrescentar] = i + 1 - qtdAcentos ;
+      posicoes[posicaoParaAcrescentar + 1] = i + 1 + iteradorBusca - qtdAcentos;
     
       posicaoParaAcrescentar += 2;
       qtdOcorrencias++;
+      i += iteradorBusca;
     }
   }
     
   return qtdOcorrencias;
 }
 
+    
 /*
  Q5 = inverte número
  @objetivo
@@ -461,14 +469,4 @@ int q6(int numeroBase, int numeroBusca) {
   }
     
   return qtdOcorrencias;
-}
-
-/*
- Q7 = jogo da velha
- @objetivo
-    Fazer um programa que implementa o jogo da velha.
-*/
-
-void q7() {
-    return;
 }
