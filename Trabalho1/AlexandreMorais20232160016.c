@@ -197,93 +197,70 @@ int q1(char data[])
     Caso o cálculo esteja correto, os atributos qtdDias, qtdMeses e qtdAnos devem ser preenchidos com os valores correspondentes.
  */
 
-// int converterDataParaDias(DataQuebrada dataQuebrada) {
-//   int dias = dataQuebrada.iDia;
-  
-//   for (int i = 1; i < dataQuebrada.iMes; i++) {
-//     if (!mesNaoTem31Dias(i)) dias += 31;
-//     else if (i == 2) dias += (ehAnoBissexto(dataQuebrada.iAno) ? 29 : 28);
-//     else dias += 30;
-//   }
-
-//   for (int i = 1; i < dataQuebrada.iAno; i++) {
-//     dias += (ehAnoBissexto(i) ? 366 : 365);
-//   }
+DiasMesesAnos q2(char datainicial[], char datafinal[]) {
+  int diasDoMes[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+  DataQuebrada dataInicialQuebrada = quebraData(datainicial);
+  DataQuebrada dataFinalQuebrada = quebraData(datafinal);
     
-//   return dias;
-// }
-
-// DiasMesesAnos converterDiasParaData(int dias) {
-//   DiasMesesAnos data;
-//   data.qtdDias = 0;
-//   data.qtdMeses = 0;
-//   data.qtdAnos = 0;
-    
-//   while (dias >= 365) {
-//     dias -= 365;
-//     data.qtdAnos++;
-//   }
-
-//   int diasDoMes[12] = {31, 28 + ehAnoBissexto(data.qtdAnos), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
-//   while (dias >= diasDoMes[data.qtdMeses]) {
-//     dias -= diasDoMes[data.qtdMeses];
-//     data.qtdMeses++;
-//   };
-
-//   data.qtdDias = dias;
-  
-//   return data;
-// }
+  DiasMesesAnos dma;
+  dma.qtdDias = 0;
+  dma.qtdMeses = 0;
+  dma.qtdAnos = 0;
+  dma.retorno = 0;
 
 
-// DiasMesesAnos q2(char datainicial[], char datafinal[]) {
-//   DataQuebrada dataInicialQuebrada = quebraData(datainicial);
-//   DataQuebrada dataFinalQuebrada = quebraData(datafinal);
-//   DiasMesesAnos dma;
+  if (q1(datainicial) == 0) {
+    dma.retorno = 2;
+    return dma;
+  }
+
+  if (q1(datafinal) == 0) {
+    dma.retorno = 3;
+    return dma;
+  }
+
+  if (dataFinalQuebrada.iAno < dataInicialQuebrada.iAno) {
+    dma.retorno = 4;
+    return dma;
+  };
+
+  if (dataFinalQuebrada.iAno == dataInicialQuebrada.iAno && dataFinalQuebrada.iMes < dataInicialQuebrada.iMes) {
+    dma.retorno = 4;
+    return dma;
+  };
+
+  if (dataFinalQuebrada.iAno == dataInicialQuebrada.iAno 
+    && dataFinalQuebrada.iMes == dataInicialQuebrada.iMes
+    && dataFinalQuebrada.iDia < dataInicialQuebrada.iDia) {
+    dma.retorno = 4;
+    return dma;
+  };
 
     
-//   if (q1(datainicial) == 0) {
-//     dma.retorno = 2;
-//     return dma;
-//   }
+  dma.qtdAnos = dataFinalQuebrada.iAno - dataInicialQuebrada.iAno;
+  dma.qtdMeses = dataFinalQuebrada.iMes - dataInicialQuebrada.iMes;
+  dma.qtdDias = dataFinalQuebrada.iDia - dataInicialQuebrada.iDia;
 
-//   if (q1(datafinal) == 0) {
-//     dma.retorno = 3;
-//     return dma;
-//   }
+  if (dma.qtdDias < 0) {
+    dma.qtdDias += diasDoMes[dataInicialQuebrada.iMes - 1];
+    dma.qtdMeses--;
+  }
+  if (dma.qtdMeses < 0) {
+    dma.qtdMeses += 12;
+    dma.qtdAnos--;
+  }
 
-//   if (dataFinalQuebrada.iAno < dataInicialQuebrada.iAno) {
-//     dma.retorno = 4;
-//     return dma;
-//   };
+  for (int i = dataInicialQuebrada.iAno; i <= dataFinalQuebrada.iAno; i++) {
+    if (ehAnoBissexto(i)) {
+      if (i == dataInicialQuebrada.iAno && i != dataFinalQuebrada.iAno && dataInicialQuebrada.iMes <= 2)
+        dma.qtdDias++;
+      if (i == dataFinalQuebrada.iAno && dataFinalQuebrada.iMes > 2) dma.qtdDias++;
+    }
+  }
 
-//   if (dataFinalQuebrada.iAno == dataInicialQuebrada.iAno && dataFinalQuebrada.iMes < dataInicialQuebrada.iMes) {
-//     dma.retorno = 4;
-//     return dma;
-//   };
-
-//   if (dataFinalQuebrada.iAno == dataInicialQuebrada.iAno 
-//     && dataFinalQuebrada.iMes == dataInicialQuebrada.iMes
-//     && dataFinalQuebrada.iDia < dataInicialQuebrada.iDia) {
-//     dma.retorno = 4;
-//     return dma;
-//   };
-
-  
-//   int diasDataInicial = converterDataParaDias(dataInicialQuebrada);
-//   int diasDataFinal = converterDataParaDias(dataFinalQuebrada);
-//   int diferencaDeDias = diasDataFinal - diasDataInicial;
-//   printf("\n%s - %s\n", datafinal, datainicial);
-//   printf("\n%d - %d = %d\n", diasDataFinal, diasDataInicial, diferencaDeDias);
-  
-//   dma = converterDiasParaData(diferencaDeDias);
-//   dma.retorno = 1;
-
-//   return dma;
-// }
-
-     DiasMesesAnos q2(char datainicial[], char datafinal[]) {}
+  dma.retorno = 1;
+  return dma;
+}
 
 /*
  Q3 = encontrar caracter em texto
