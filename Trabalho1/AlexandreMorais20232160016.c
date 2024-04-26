@@ -24,7 +24,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <wchar.h>
 #include "AlexandreMorais20232160016.h" // Substitua pelo seu arquivo de header renomeado
 
 /*
