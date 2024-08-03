@@ -1,14 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define TAM 10
 
 #include "EstruturaVetores.h"
 
-typedef struct {
-    int * array;
-    int tamanho;
-    int quantidade;
-} EstruturaAuxiliar;
 
 void inicializarEstrutura(EstruturaAuxiliar * estrutura, int tamanho) {
     estrutura->array = (int *) malloc(tamanho * sizeof(int));
@@ -391,4 +385,19 @@ void finalizar() {
         if (vetorPrincipal[i] != NULL) free(vetorPrincipal[i]->array);
         vetorPrincipal[i] = NULL;
     }
+}
+
+int validarAntesDePegarQuantidadeDeElementos(int posicao) {
+    if (posicao < 1 || posicao > TAM) return POSICAO_INVALIDA;
+    if (vetorPrincipal[posicao - 1] == NULL) return SEM_ESTRUTURA_AUXILIAR;
+
+    EstruturaAuxiliar * estruturaAuxiliar = vetorPrincipal[posicao - 1];
+
+    if (estruturaAuxiliar->quantidade == 0) return ESTRUTURA_AUXILIAR_VAZIA;
+
+    return SUCESSO;
+}
+
+int getQuantidadeElementosEstruturaAuxiliarSemRetornos(int posicao) {
+    return  vetorPrincipal[posicao - 1]->quantidade;
 }

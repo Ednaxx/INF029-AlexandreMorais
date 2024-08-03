@@ -1,5 +1,6 @@
 #ifndef TRABALHO2_ESTRUTURAVETORES_H
 #define TRABALHO2_ESTRUTURAVETORES_H
+#define TAM 10
 
 // enumeracoes (enum) ajudam a deixar o codigo mais legivel, possibilitando que voce de significado
 // as suas constantes, para mais informacoes https://en.cppreference.com/w/c/language/enum
@@ -13,6 +14,12 @@ typedef struct reg {
     int conteudo;
     struct reg *prox;
 } No;
+
+typedef struct {
+    int * array;
+    int tamanho;
+    int quantidade;
+} EstruturaAuxiliar;
 
 int criarEstruturaAuxiliar(int posicao, int tamanho);
 int inserirNumeroEmEstrutura(int posicao, int valor);
@@ -30,6 +37,8 @@ void destruirListaEncadeadaComCabecote(No **inicio);
 
 void inicializar();
 void finalizar();
-void dobrar(int *x);
+
+int validarAntesDePegarQuantidadeDeElementos(int posicao);
+int getQuantidadeElementosEstruturaAuxiliarSemRetornos(int posicao);
 
 #endif  // TRABALHO2_ESTRUTURAVETORES_H
